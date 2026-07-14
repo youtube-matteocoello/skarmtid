@@ -15,21 +15,28 @@
 
         .active { display: flex; }
 
-        /* Lager */
         #page-login { background: #1a1a1c; z-index: 10; }
-        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; z-index: 20; transform: translateX(100%); }
+        
+        /* Meny-layout: Vi lägger knapparna i en kolumn som alltid ligger centrerad */
+        #page-menu { 
+            background: url('CcAjd.jpg') no-repeat center center; 
+            background-size: contain; /* 'contain' hindrar in-zoomning */
+            z-index: 20; transform: translateX(100%);
+            gap: 15px; /* Avstånd mellan knapparna */
+        }
+        
+        /* Knapparnas utseende */
+        .menu-btn { 
+            width: 85%; height: 60px; 
+            background: transparent; /* Osynlig men klickbar */
+            border: none; cursor: pointer;
+        }
+        .menu-btn:active { background: rgba(255,255,255,0.1); border-radius: 15px; }
+
         #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
 
         .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
-
-        /* Hela ytan som knapp */
-        .full-width-btn { 
-            position: absolute; width: 90%; height: 65px; cursor: pointer; 
-            border-radius: 15px; 
-        }
-        /* Effekten när man trycker */
-        .full-width-btn:active { background: rgba(255,255,255,0.1); }
 
         .dots { display: flex; gap: 20px; margin-bottom: 20px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
@@ -44,10 +51,10 @@
     </div>
 
     <div id="page-menu" class="page">
-        <div class="full-width-btn" style="top: 320px;" onclick="goToYouTube()"></div>
-        <div class="full-width-btn" style="top: 390px;" onclick="goToYouTube()"></div>
-        <div class="full-width-btn" style="top: 460px;" onclick="goToYouTube()"></div>
-        <div class="full-width-btn" style="top: 530px;" onclick="location.reload()"></div>
+        <div style="height: 250px;"></div> <button class="menu-btn" onclick="goToYouTube()"></button>
+        <button class="menu-btn" onclick="goToYouTube()"></button>
+        <button class="menu-btn" onclick="goToYouTube()"></button>
+        <button class="menu-btn" onclick="location.reload()"></button>
     </div>
 
     <div id="page-youtube" class="page">
