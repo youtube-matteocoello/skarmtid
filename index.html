@@ -6,7 +6,7 @@
     <title>Skärmtid</title>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #1a1a1c; margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: white; }
-        .page { width: 100%; max-width: 450px; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        .page { width: 100%; max-width: 450px; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; position: relative; }
         
         /* 1. Lösenord */
         #page-login { display: flex; }
@@ -14,10 +14,21 @@
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
 
-        /* 2. Menyn (Godkänn tid) */
-        #page-menu { background: #1a1a1c; gap: 10px; }
-        .menu-btn { width: 85%; padding: 18px; border: none; border-radius: 14px; background: #2c2c2e; color: #007aff; font-size: 17px; font-weight: 500; cursor: pointer; }
-        .cancel-btn { background: #2c2c2e; color: #ff3b30; }
+        /* 2. Meny med din bild (CcAjd.jpg) */
+        #page-menu { 
+            display: none; 
+            background: url('CcAjd.jpg') no-repeat center center; 
+            background-size: cover; /* Använder 'cover' för att fylla skärmen */
+            position: relative;
+        }
+        
+        /* Osynliga knappar */
+        .hitbox { 
+            position: absolute; 
+            width: 75%; 
+            height: 55px; 
+            cursor: pointer; 
+        }
 
         /* 3. YouTube */
         #page-youtube { display: none; background: #000; overflow-y: auto; }
@@ -33,10 +44,10 @@
     </div>
 
     <div id="page-menu" class="page">
-        <button class="menu-btn" onclick="showYouTube()">Godkänn i 15 minuter</button>
-        <button class="menu-btn" onclick="showYouTube()">Godkänn i en timme</button>
-        <button class="menu-btn" onclick="showYouTube()">Godkänn hela dagen</button>
-        <button class="menu-btn cancel-btn" onclick="location.reload()">Avbryt</button>
+        <div class="hitbox" style="top: 325px;" onclick="showYouTube()"></div>
+        <div class="hitbox" style="top: 395px;" onclick="showYouTube()"></div>
+        <div class="hitbox" style="top: 465px;" onclick="showYouTube()"></div>
+        <div class="hitbox" style="top: 535px;" onclick="location.reload()"></div>
     </div>
 
     <div id="page-youtube" class="page">
