@@ -5,37 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skärmtid</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #1a1a1c; margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: white; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; }
         
         .page { 
-            width: 100%; max-width: 450px; height: 100%; position: absolute; top: 0;
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
-            transform: translateX(100%); /* Startar gömd till höger */
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        
-        .active-page { transform: translateX(0); } /* Glider in på plats */
-        .exit-page { transform: translateX(-100%); } /* Glider ut till vänster */
-        
-        /* 1. Lösenord */
-        #page-login { transform: translateX(0); }
-        .dots { display: flex; gap: 20px; margin: 20px 0; justify-content: center; }
+
+        /* Lagerhantering */
+        #page-login { z-index: 3; background: #1a1a1c; }
+        #page-menu { z-index: 2; background: url('CcAjd.jpg') no-repeat center center; background-size: cover; transform: translateX(100%); }
+        #page-youtube { z-index: 1; background: #000; transform: translateX(100%); overflow-y: auto; }
+
+        /* Animationer */
+        .slide-left { transform: translateX(-100%) !important; }
+        .slide-in { transform: translateX(0) !important; }
+
+        .dots { display: flex; gap: 20px; margin-bottom: 20px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
 
-        /* 2. Meny */
-        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; }
-        .hitbox { position: absolute; width: 75%; height: 55px; cursor: pointer; }
-
-        /* 3. YouTube */
-        #page-youtube { background: #000; overflow-y: auto; }
-        
-        #hidden-input { position: absolute; opacity: 0; }
+        .hitbox { position: absolute; width: 80%; height: 60px; cursor: pointer; }
     </style>
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
 
     <div id="page-login" class="page">
-        <h2>Ange lösenkod för Skärmtid</h2>
+        <h2 style="color:white">Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
@@ -50,7 +47,7 @@
         <img src="nya.jpeg" style="width: 100%; display: block;">
     </div>
 
-    <input type="tel" id="hidden-input" maxlength="4">
+    <input type="tel" id="hidden-input" maxlength="4" style="position:absolute; opacity:0;">
 
     <script>
         const input = document.getElementById("hidden-input");
@@ -60,16 +57,14 @@
         input.addEventListener("input", () => {
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
-                input.blur();
-                document.getElementById('page-login').classList.add('exit-page');
-                document.getElementById('page-menu').classList.add('active-page');
+                document.getElementById('page-login').classList.add('slide-left');
+                document.getElementById('page-menu').classList.add('slide-in');
             }
         });
 
         function goToYouTube() {
-            document.getElementById('page-menu').classList.remove('active-page');
-            document.getElementById('page-menu').classList.add('exit-page');
-            document.getElementById('page-youtube').classList.add('active-page');
+            document.getElementById('page-menu').classList.add('slide-left');
+            document.getElementById('page-youtube').classList.add('slide-in');
         }
     </script>
 </body>
