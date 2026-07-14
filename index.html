@@ -6,39 +6,35 @@
     <title>Skärmtid</title>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #1a1a1c; margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: white; }
-        .page { width: 100%; max-width: 450px; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; position: relative; }
+        
+        /* Mjuk animation för alla sidor */
+        .page { 
+            width: 100%; max-width: 450px; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; position: absolute;
+            transition: opacity 0.5s ease-in-out; 
+            opacity: 0;
+        }
+        
+        .active-page { display: flex !important; opacity: 1 !important; }
         
         /* 1. Lösenord */
-        #page-login { display: flex; }
+        #page-login { display: flex; opacity: 1; }
         .dots { display: flex; gap: 20px; margin: 20px 0; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
 
-        /* 2. Meny med din bild (CcAjd.jpg) */
-        #page-menu { 
-            display: none; 
-            background: url('CcAjd.jpg') no-repeat center center; 
-            background-size: cover; /* Använder 'cover' för att fylla skärmen */
-            position: relative;
-        }
-        
-        /* Osynliga knappar */
-        .hitbox { 
-            position: absolute; 
-            width: 75%; 
-            height: 55px; 
-            cursor: pointer; 
-        }
+        /* 2. Meny med CcAjd.jpg */
+        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; }
+        .hitbox { position: absolute; width: 75%; height: 55px; cursor: pointer; }
 
         /* 3. YouTube */
-        #page-youtube { display: none; background: #000; overflow-y: auto; }
+        #page-youtube { background: #000; overflow-y: auto; }
         
         #hidden-input { position: absolute; opacity: 0; }
     </style>
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
 
-    <div id="page-login" class="page">
+    <div id="page-login" class="page active-page">
         <h2>Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
@@ -66,15 +62,16 @@
             if(input.value.length === 4) {
                 input.blur();
                 setTimeout(() => {
-                    document.getElementById('page-login').style.display = 'none';
-                    document.getElementById('page-menu').style.display = 'flex';
+                    document.getElementById('page-login').classList.remove('active-page');
+                    document.getElementById('page-menu').classList.add('active-page');
                 }, 300);
             }
         });
 
         function showYouTube() {
-            document.getElementById('page-menu').style.display = 'none';
-            document.getElementById('page-youtube').style.display = 'flex';
+            // Här sker den mjuka övergången
+            document.getElementById('page-menu').classList.remove('active-page');
+            document.getElementById('page-youtube').classList.add('active-page');
         }
     </script>
 </body>
