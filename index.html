@@ -9,27 +9,31 @@
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; /* Dölj som standard */
-            flex-direction: column; align-items: center; justify-content: center;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .active { display: flex; } /* Endast aktiv sida visas */
+        .active { display: flex; }
 
-        /* Bakgrunder */
+        /* Lager */
         #page-login { background: #1a1a1c; z-index: 10; }
         #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; z-index: 20; transform: translateX(100%); }
         #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
 
-        /* Animationer */
         .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
+
+        /* Hela ytan som knapp */
+        .full-width-btn { 
+            position: absolute; width: 90%; height: 65px; cursor: pointer; 
+            border-radius: 15px; 
+        }
+        /* Effekten när man trycker */
+        .full-width-btn:active { background: rgba(255,255,255,0.1); }
 
         .dots { display: flex; gap: 20px; margin-bottom: 20px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
-
-        .hitbox { position: absolute; width: 80%; height: 60px; cursor: pointer; }
     </style>
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
@@ -40,10 +44,10 @@
     </div>
 
     <div id="page-menu" class="page">
-        <div class="hitbox" style="top: 325px;" onclick="goToYouTube()"></div>
-        <div class="hitbox" style="top: 395px;" onclick="goToYouTube()"></div>
-        <div class="hitbox" style="top: 465px;" onclick="goToYouTube()"></div>
-        <div class="hitbox" style="top: 535px;" onclick="location.reload()"></div>
+        <div class="full-width-btn" style="top: 320px;" onclick="goToYouTube()"></div>
+        <div class="full-width-btn" style="top: 390px;" onclick="goToYouTube()"></div>
+        <div class="full-width-btn" style="top: 460px;" onclick="goToYouTube()"></div>
+        <div class="full-width-btn" style="top: 530px;" onclick="location.reload()"></div>
     </div>
 
     <div id="page-youtube" class="page">
