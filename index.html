@@ -7,22 +7,22 @@
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #1a1a1c; margin: 0; display: flex; justify-content: center; height: 100vh; overflow: hidden; color: white; }
         
-        /* Mjuk animation för alla sidor */
         .page { 
-            width: 100%; max-width: 450px; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; position: absolute;
-            transition: opacity 0.5s ease-in-out; 
-            opacity: 0;
+            width: 100%; max-width: 450px; height: 100%; position: absolute; top: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            transform: translateX(100%); /* Startar gömd till höger */
         }
         
-        .active-page { display: flex !important; opacity: 1 !important; }
+        .active-page { transform: translateX(0); } /* Glider in på plats */
+        .exit-page { transform: translateX(-100%); } /* Glider ut till vänster */
         
         /* 1. Lösenord */
-        #page-login { display: flex; opacity: 1; }
-        .dots { display: flex; gap: 20px; margin: 20px 0; }
+        #page-login { transform: translateX(0); }
+        .dots { display: flex; gap: 20px; margin: 20px 0; justify-content: center; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
 
-        /* 2. Meny med CcAjd.jpg */
+        /* 2. Meny */
         #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; }
         .hitbox { position: absolute; width: 75%; height: 55px; cursor: pointer; }
 
@@ -34,15 +34,15 @@
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
 
-    <div id="page-login" class="page active-page">
+    <div id="page-login" class="page">
         <h2>Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
     <div id="page-menu" class="page">
-        <div class="hitbox" style="top: 325px;" onclick="showYouTube()"></div>
-        <div class="hitbox" style="top: 395px;" onclick="showYouTube()"></div>
-        <div class="hitbox" style="top: 465px;" onclick="showYouTube()"></div>
+        <div class="hitbox" style="top: 325px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 395px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 465px;" onclick="goToYouTube()"></div>
         <div class="hitbox" style="top: 535px;" onclick="location.reload()"></div>
     </div>
 
@@ -61,16 +61,14 @@
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
                 input.blur();
-                setTimeout(() => {
-                    document.getElementById('page-login').classList.remove('active-page');
-                    document.getElementById('page-menu').classList.add('active-page');
-                }, 300);
+                document.getElementById('page-login').classList.add('exit-page');
+                document.getElementById('page-menu').classList.add('active-page');
             }
         });
 
-        function showYouTube() {
-            // Här sker den mjuka övergången
+        function goToYouTube() {
             document.getElementById('page-menu').classList.remove('active-page');
+            document.getElementById('page-menu').classList.add('exit-page');
             document.getElementById('page-youtube').classList.add('active-page');
         }
     </script>
