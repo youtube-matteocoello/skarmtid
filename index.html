@@ -22,25 +22,26 @@
         .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
 
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
-        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
+        
+        /* Rubrik gjord betydligt fetare */
+        .section-title { font-size: 20px; font-weight: 800; color: white; margin-bottom: 45px; }
+        
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         .dot { width: 16px; height: 16px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; transition: 0.2s; }
         .dot.active { background-color: white; transform: scale(1.15); }
         
-        /* Tunnt rött piller */
         .error-pill { 
             background-color: #ff3b30; 
             color: white; 
-            padding: 4px 16px; /* Tunnare padding */
+            padding: 4px 16px; 
             border-radius: 50px; 
-            font-size: 13px; /* Något mindre storlek */
+            font-size: 13px; 
             display: inline-block; 
-            font-weight: 400; /* Texten tillbaka till normal vikt */
+            font-weight: 400; 
         }
 
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
-        /* MÖRK MENY (DARK MODE) PÅ GRÅ BAKGRUND */
         .menu-container {
             position: absolute;
             top: 28%; left: 50%; transform: translateX(-50%);
