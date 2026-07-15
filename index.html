@@ -16,8 +16,8 @@
         .dot.active { background-color: white; }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        .time-selection-image { width: 100%; cursor: pointer; }
-        #fake-youtube { background: #000; overflow-y: auto; }
+        #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; }
+        .time-selection-image { width: 100%; }
         #hidden-input { position: absolute; opacity: 0; }
     </style>
 </head>
@@ -33,12 +33,12 @@
         </div>
     </div>
 
-    <div id="time-page" class="page" onclick="goToYoutube()">
-        <img src="630BAEBF-D92C-4B50-928D-D7AFAC85348A.jpeg" class="time-selection-image" alt="Välj tid">
+    <div id="fake-youtube" class="page" onclick="goToTimePage()">
+        <img src="bakgrund.jpg" style="width: 100%; display: block;">
     </div>
 
-    <div id="fake-youtube" class="page">
-        <img src="bakgrund.jpg" style="width: 100%; display: block;">
+    <div id="time-page" class="page">
+        <img src="630BAEBF-D92C-4B50-928D-D7AFAC85348A.jpeg" class="time-selection-image" alt="Välj tid">
     </div>
 
     <input type="tel" id="hidden-input" maxlength="4">
@@ -54,15 +54,15 @@
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             
             if(length === 4) {
-                // Gå till tidväljaren
+                // Gå till YouTube
                 document.getElementById("login-page").classList.remove("active");
-                document.getElementById("time-page").classList.add("active");
+                document.getElementById("fake-youtube").classList.add("active");
             }
         });
 
-        function goToYoutube() {
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.add("active");
+        function goToTimePage() {
+            document.getElementById("fake-youtube").classList.remove("active");
+            document.getElementById("time-page").classList.add("active");
         }
     </script>
 </body>
