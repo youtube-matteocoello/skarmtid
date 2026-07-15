@@ -15,39 +15,37 @@
             display: none; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* Inloggning - Apple stil */
+        /* Inloggningssida */
         #page-login { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            background: #000; z-index: 10; display: flex; 
+            background: #1a1a1c; z-index: 10; display: flex; 
         }
 
-        /* X-knapp (Apple-stil) */
+        /* X-knapp (Exakt Apple-stil) */
         .x-button { 
-            position: absolute; top: 50px; right: 30px; 
-            color: rgba(255, 255, 255, 0.6); font-size: 24px; cursor: pointer;
-            z-index: 50;
+            position: absolute; top: 45px; right: 25px; 
+            color: rgba(255, 255, 255, 0.5); font-size: 28px; cursor: pointer;
+            z-index: 50; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
         }
 
         h2 { 
-            color: #fff; font-size: 22px; font-weight: 500; margin-bottom: 25px; 
-            letter-spacing: -0.3px;
+            color: #fff; font-size: 20px; font-weight: 500; margin-bottom: 25px; 
+            letter-spacing: -0.2px;
         }
 
-        /* Prickar (iOS-stil) */
-        .dots { display: flex; gap: 18px; }
+        /* Prickar */
+        .dots { display: flex; gap: 16px; margin-bottom: 25px; }
         .dot { 
-            width: 14px; height: 14px; 
-            border: 1.5px solid rgba(255, 255, 255, 0.3); 
+            width: 15px; height: 15px; 
+            border: 1.5px solid rgba(255, 255, 255, 0.4); 
             border-radius: 50%;
-            transition: background 0.2s, border-color 0.2s;
         }
         .dot.active { background: #fff; border-color: #fff; }
 
-        /* Felmeddelande (iOS-stil) */
+        /* Felmeddelande */
         .error-message {
-            color: #ff453a; /* iOS Red */
+            color: #ff3b30;
             font-size: 14px;
-            margin-top: 20px;
             font-weight: 400;
         }
 
