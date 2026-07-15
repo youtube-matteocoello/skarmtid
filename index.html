@@ -7,7 +7,7 @@
     <style>
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #1a1a1c; 
+            background-color: #000000; /* Helt svart bakgrund för djup */
             overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
         }
         
@@ -23,35 +23,41 @@
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: 0.2s; }
+        .dot { width: 16px; height: 16px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; transition: 0.2s; }
         .dot.active { background-color: white; transform: scale(1.15); }
-        
-        /* Justerad textvikt här */
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; font-weight: 400; }
 
-        #time-page { background: #1a1a1c; position: relative; }
+        #time-page { background: #000000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
+        /* DEEP DARK MODE - LIQUID GLASS */
         .menu-container {
             position: absolute;
             top: 28%; left: 50%; transform: translateX(-50%);
             width: 80%; 
             max-width: 350px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-            backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
-            -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
+            
+            /* Mörk, transparent bas (iOS Dark Mode standard) */
+            background: rgba(28, 28, 30, 0.75); 
+            backdrop-filter: blur(60px) saturate(180%);
+            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            
             border-radius: 28px;
             padding: 8px;
             z-index: 10;
             display: flex; flex-direction: column; gap: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            
+            /* Subtil kant som fångar ljus mot svart bakgrund */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            
             animation: springUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .system-button {
             width: 100%; height: 54px;
-            background-color: rgba(255, 255, 255, 0.06);
+            background-color: rgba(255, 255, 255, 0.08); /* Mörk knappton */
             border-radius: 16px; border: none;
             color: #ffffff; font-size: 17px; font-weight: 500;
             display: flex; align-items: center; justify-content: center;
@@ -59,7 +65,7 @@
         }
         .system-button.drag-active { background-color: rgba(255, 255, 255, 0.15); }
 
-        #fake-youtube { background: #1a1a1c; }
+        #fake-youtube { background: #000000; }
         #fake-youtube img { width: 100%; height: 100%; object-fit: cover; }
         #revealed-code { color: #ff3b30; text-align: center; position: absolute; bottom: 50px; left: 0; right: 0; font-size: 20px; z-index: 999; opacity: 0; transition: 1s; }
         #revealed-code.show { opacity: 1; }
