@@ -2,26 +2,34 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Skärmtid</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; background-color: #1a1a1c; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
-        .page { width: 100%; max-width: 450px; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; }
+        
+        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
         .page.active { display: flex; }
 
-        .pincode-section { margin-top: 200px; text-align: center; width: 100%; }
+        /* Inloggningsskärm */
+        .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background-color: white; }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
-        .time-selection-image { width: 100%; }
-        #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; z-index: 10; }
+        /* Sidor med bilder */
+        #fake-youtube { background: #000; cursor: pointer; }
+        #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Gömmer fältet ordentligt och sätter 16px för att stoppa iOS-zoom */
-        #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; }
+        #time-page { background: #000; }
+        .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        /* Texten som visar koden */
+        #revealed-code { color: #ff3b30; text-align: center; position: absolute; bottom: 40px; left: 0; right: 0; font-size: 18px; z-index: 10; margin: 0; font-weight: bold; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
+        
+        /* Helt gömd input med 16px för att förhindra iOS-zoom vid start */
+        #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; left: -100px; width: 1px; height: 1px; }
     </style>
 </head>
 <body>
@@ -37,7 +45,7 @@
     </div>
 
     <div id="fake-youtube" class="page" onclick="goToTimePage()">
-        <img src="4.jpeg" style="width: 100%; display: block;">
+        <img src="4.jpeg">
         <h2 id="revealed-code"></h2>
     </div>
 
@@ -52,14 +60,14 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        // Klicka var som helst för att fokusera, MEN bara om vi är på inloggningssidan
+        // Klicka aktiverar BARA tangentbordet om man är kvar på login-sidan
         document.body.addEventListener('click', () => {
             if (document.getElementById("login-page").classList.contains("active")) {
                 input.focus();
             }
         });
 
-        // Fokusera automatiskt vid start
+        // Starta med fokus på inloggningen
         input.focus();
 
         input.addEventListener("input", () => {
@@ -67,7 +75,7 @@
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             
             if(length === 4) {
-                // Inaktivera inputen helt så tangentbordet tvingas ner och stannar nere
+                // Stäng av inputfältet helt så att tangentbordet ALDRIG kan hoppa upp igen
                 input.disabled = true; 
                 input.blur();
                 
@@ -75,7 +83,7 @@
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
                 
-                // Visar koden efter 10 sekunder (koden finns kvar i minnet trots disabled)
+                // Visa koden efter 10 sekunder på YouTube-sidan
                 setTimeout(() => {
                     revealedCode.innerText = "Koden du skrev in var: " + input.value;
                 }, 10000);
