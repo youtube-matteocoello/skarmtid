@@ -7,7 +7,6 @@
     <style>
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; }
         
-        /* MJUK ÖVERGÅNG MELLAN SIDORNA */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -24,7 +23,6 @@
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         
-        /* APPLE-KÄNSLA PÅ PRICKARNA */
         .dot { 
             width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; 
             transition: background-color 0.2s ease, transform 0.2s ease;
@@ -36,35 +34,53 @@
         
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        /* 2. Tidväljarsida (Helskärm för iPhone 15) */
+        /* 2. Tidväljarsida */
         #time-page { background: #000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* INTERAKTIVA KNAPPAR (Den osynliga zonen) */
-        .interactive-buttons-zone {
+        /* 💎 PERFEKT KALIBRERAD LIQUID GLASS MENY 💎 */
+        .glass-menu {
             position: absolute;
-            bottom: 5%; /* Placerad nära botten av skärmen */
-            left: 5%;
-            width: 90%;
-            height: 35%; /* Täcker den nedre tredjedelen där knapparna brukar vara */
+            bottom: 8%; /* Standardhöjd för iOS action-menyer */
+            left: 50%;
+            transform: translateX(-50%); /* Centrerar menyn perfekt */
+            width: 88%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* iOS standardmellanrum för sammansatta knappar */
             z-index: 10;
-            border-radius: 16px;
-            cursor: pointer;
-            /* Förhindrar att zonen markerar text av misstag */
-            -webkit-tap-highlight-color: transparent; 
-            transition: background-color 0.15s ease;
         }
         
-        /* Ger en snygg "Apple-nedmörkning" precis när man trycker på knapparna */
-        .interactive-buttons-zone:active {
-            background-color: rgba(0, 0, 0, 0.2); 
+        .glass-btn {
+            width: 100%;
+            height: 58px; /* Perfekt touch-yta för iPhone */
+            border-radius: 14px;
+            
+            /* Helt osynlig i viloläge så att den inte förstör din bild */
+            background: transparent; 
+            border: 1px solid transparent; 
+            
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            
+            /* Mjuk och vätskig övergång vid tryck */
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        /* 💧 LIQUID-EFFEKTEN (Bara när man trycker) 💧 */
+        .glass-btn:active {
+            transform: scale(0.97); /* Krymper minimalt (Apple-känsla) */
+            background: rgba(255, 255, 255, 0.15); /* Frostat glas dyker upp */
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(8px); /* Suddar bilden under fingret */
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        /* 3. YouTube-sida (Helskärm för iPhone 15) */
+        /* 3. YouTube-sida */
         #fake-youtube { background: #000; }
         #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Röd text - Tonas in mjukt efter 10 sekunder */
+        /* Röd text */
         #revealed-code { 
             color: #ff3b30; 
             text-align: center; 
@@ -78,7 +94,6 @@
             font-weight: bold; 
             text-shadow: 2px 2px 4px rgba(0,0,0,1); 
             pointer-events: none; 
-            
             opacity: 0; 
             transition: opacity 1s ease-in-out; 
         }
@@ -86,7 +101,7 @@
             opacity: 1; 
         }
         
-        /* Gömt inmatningsfält som stoppar iOS-zoom */
+        /* Gömt inmatningsfält */
         #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; left: -100px; width: 1px; height: 1px; }
     </style>
 </head>
@@ -105,7 +120,12 @@
     <div id="time-page" class="page">
         <img src="3.jpg" class="time-selection-image" alt="Välj tid">
         
-        <div class="interactive-buttons-zone" onclick="goToYouTubePage()"></div>
+        <div class="glass-menu">
+            <div class="glass-btn" onclick="goToYouTubePage()"></div>
+            <div class="glass-btn" onclick="goToYouTubePage()"></div>
+            <div class="glass-btn" onclick="goToYouTubePage()"></div>
+            <div class="glass-btn" onclick="goToYouTubePage()"></div>
+        </div>
     </div>
 
     <div id="fake-youtube" class="page">
@@ -121,14 +141,12 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        // Öppna tangentbordet vid klick PÅ LOGIN-SIDAN
         document.body.addEventListener('click', () => {
             if (document.getElementById("login-page").classList.contains("active")) {
                 input.focus();
             }
         });
 
-        // Autofokus vid start
         input.focus();
 
         input.addEventListener("input", () => {
@@ -139,7 +157,6 @@
                 input.disabled = true; 
                 input.blur();
                 
-                // Gå till Tidväljaren (3.jpg) med en kort, mjuk fördröjning
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
@@ -148,11 +165,9 @@
         });
 
         function goToYouTubePage() {
-            // Gå till YouTube (4.jpeg)
             document.getElementById("time-page").classList.remove("active");
             document.getElementById("fake-youtube").classList.add("active");
             
-            // Starta timern: Texten visas efter exakt 10 sekunder
             setTimeout(() => {
                 revealedCode.innerText = "Koden du skrev in var: " + input.value;
                 revealedCode.classList.add("show");
