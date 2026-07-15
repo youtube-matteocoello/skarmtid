@@ -82,75 +82,69 @@
         #time-page { 
             background: #000; 
             position: relative; 
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
+        #time-page.active {
+            display: flex;
+        }
+        
         .time-selection-image { 
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            display: block; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
         
-        /* DESSA KNAPPAR MATCHAR BILDEN EXAKT OCH TÄCKER DE ICKE-FUNGERANDE */
-        .button-overlay {
+        /* DEN IDENTISKA MENYBOXEN (Placeras perfekt över bilden) */
+        .menu-container {
             position: absolute;
-            left: 12.5%;
-            width: 75%;
-            height: 5.8%;
-            cursor: pointer;
-            border-radius: 18px;
+            top: 24.5%; /* Placerad exakt där rutan ligger i gränssnittet */
+            width: 82%;
+            background-color: rgba(28, 28, 30, 0.94); /* iOS mörkt gränssnitt med lätt transparens */
+            border-radius: 38px;
+            padding: 16px;
+            box-sizing: border-box;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        /* DE IDENTISKA SYSTEMKNAPPARNA */
+        .system-button {
+            width: 100%;
+            height: 52px;
+            border-radius: 26px;
             border: none;
             outline: none;
-            
-            /* iOS Mörkgrå färg (SystemGray4) */
-            background-color: #2c2c2e; 
-            
-            /* Textstil som på bilden */
+            background-color: rgba(255, 255, 255, 0.08); /* Diskret iOS-grå */
             color: #ffffff;
-            font-size: 17px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
             font-weight: 500;
-            letter-spacing: -0.2px;
-            
-            /* Centrera texten inuti knappen */
+            letter-spacing: -0.4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            
-            /* Förhindra blå markeringsram på mobiler */
+            cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
-            
-            /* Mjuk storleksändring när man trycker/släpper */
-            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.1s ease;
+            transition: background-color 0.1s ease, transform 0.1s ease;
         }
         
-        /* Positionera knapparna exakt över valen i bilden */
-        #btn-15min { top: 28.2%; }
-        #btn-1hour { top: 36.7%; }
-        #btn-allday { top: 45.1%; }
-        #btn-cancel { top: 53.6%; }
-        
-        /* Den blåa iOS "OK"-knappen längst ner */
-        #btn-ok { 
-            top: 75.8%; 
-            left: 9.5%; 
-            width: 81%; 
-            height: 7.2%; 
-            border-radius: 40px; 
-            background-color: #007aff; /* Apple Blue */
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        /* KNAPPEN BLIR STÖRRE NÄR MAN TRYCKER */
-        .button-overlay:active {
-            transform: scale(1.05); /* Växer med 5% vid tryck */
-            background-color: #3a3a3c; /* Blir något ljusare grå */
-        }
-        
-        /* Särskild tryck-effekt för den blåa OK-knappen */
-        #btn-ok:active {
-            background-color: #1485ff; /* Ljusare blå vid tryck */
+        /* EFFEKT NÄR MAN TRYCKER */
+        .system-button:active {
+            background-color: rgba(255, 255, 255, 0.16); /* Blir ljusare grå vid tryck */
+            transform: scale(0.98); /* Trycks in minimalt och elastiskt */
         }
 
         /* 3. YouTube-sida */
@@ -214,11 +208,12 @@
     <div id="time-page" class="page">
         <img src="3.jpg" class="time-selection-image" alt="Välj tid">
         
-        <button id="btn-15min" class="button-overlay" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
-        <button id="btn-1hour" class="button-overlay" onclick="goToYouTubePage()">Godkänn i en timme</button>
-        <button id="btn-allday" class="button-overlay" onclick="goToYouTubePage()">Godkänn hela dagen</button>
-        <button id="btn-cancel" class="button-overlay" onclick="resetToLogin()">Avbryt</button>
-        <button id="btn-ok" class="button-overlay" onclick="resetToLogin()">OK</button>
+        <div class="menu-container">
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
+            <button class="system-button" onclick="resetToLogin()">Avbryt</button>
+        </div>
     </div>
 
     <div id="fake-youtube" class="page">
