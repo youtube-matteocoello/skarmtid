@@ -18,8 +18,11 @@
             100% { transform: translate(-50%, 0) scale(1); opacity: 1; } 
         }
 
-        .page { display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
-        .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
+        .page { 
+            display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; 
+            transition: opacity 0.4s ease; /* Apple-smooth fade */
+        }
+        .page.active { display: flex; opacity: 1; }
 
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
@@ -44,7 +47,8 @@
             display: flex; flex-direction: column; gap: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            animation: springUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            /* Animation för mjuk in/utgång */
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
         }
 
         .system-button {
@@ -101,16 +105,42 @@
 
         document.body.addEventListener('click', () => { if(document.getElementById("login-page").classList.contains("active")) input.focus(); });
         input.focus();
+        
         input.addEventListener("input", () => {
             let length = input.value.length;
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
-            if(length === 4) { input.disabled = true; setTimeout(() => { document.getElementById("login-page").classList.remove("active"); document.getElementById("time-page").classList.add("active"); }, 300); }
+            if(length === 4) { 
+                input.disabled = true; 
+                setTimeout(() => { 
+                    document.getElementById("login-page").classList.remove("active"); 
+                    document.getElementById("time-page").classList.add("active"); 
+                }, 300); 
+            }
         });
+
         function getButtonAtTouch(touch) { let target = document.elementFromPoint(touch.clientX, touch.clientY); return target ? target.closest('.system-button') : null; }
         iosMenu.addEventListener('touchmove', (e) => { const activeBtn = getButtonAtTouch(e.touches[0]); menuButtons.forEach(btn => btn.classList.toggle('drag-active', btn === activeBtn)); }, { passive: true });
         iosMenu.addEventListener('touchend', (e) => { menuButtons.forEach(btn => btn.classList.remove('drag-active')); const activeBtn = getButtonAtTouch(e.changedTouches[0]); if (activeBtn) activeBtn.click(); });
-        function goToYouTubePage() { document.getElementById("time-page").classList.remove("active"); document.getElementById("fake-youtube").classList.add("active"); setTimeout(() => { revealedCode.innerText = "Koden var: " + input.value; revealedCode.classList.add("show"); }, 4000); }
-        function resetToLogin() { input.value = ""; input.disabled = false; revealedCode.innerText = ""; revealedCode.classList.remove("show"); dots.forEach(dot => dot.classList.remove("active")); document.getElementById("time-page").classList.remove("active"); document.getElementById("fake-youtube").classList.remove("active"); document.getElementById("login-page").classList.add("active"); setTimeout(() => input.focus(), 400); }
+
+        function goToYouTubePage() {
+            // Apple-smooth animation: skala ner och fada ut
+            iosMenu.style.transform = "translateX(-50%) scale(0.95)";
+            iosMenu.style.opacity = "0";
+            
+            setTimeout(() => {
+                document.getElementById("time-page").classList.remove("active");
+                document.getElementById("fake-youtube").classList.add("active");
+                
+                setTimeout(() => { 
+                    revealedCode.innerText = "Koden var: " + input.value; 
+                    revealedCode.classList.add("show"); 
+                }, 1000);
+            }, 400);
+        }
+
+        function resetToLogin() {
+            location.reload();
+        }
     </script>
 </body>
 </html>
