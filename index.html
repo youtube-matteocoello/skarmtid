@@ -19,7 +19,9 @@
         #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
         .time-selection-image { width: 100%; }
         #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; }
-        #hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+        
+        /* FIX: font-size 16px stoppar auto-zoom på iPhone */
+        #hidden-input { position: absolute; opacity: 0; pointer-events: none; font-size: 16px; }
     </style>
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
@@ -50,7 +52,11 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        input.focus();
+        // Aktivera inputen när man klickar på sidan
+        document.body.addEventListener('click', () => {
+            input.style.pointerEvents = 'auto';
+            input.focus();
+        });
 
         input.addEventListener("input", () => {
             let length = input.value.length;
@@ -59,6 +65,7 @@
             if(length === 4) {
                 input.readOnly = true; 
                 input.blur();
+                input.style.pointerEvents = 'none';
                 
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
