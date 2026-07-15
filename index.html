@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Skärmtid</title>
     <style>
-        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; }
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: #1a1a1c; 
+            overflow: hidden; 
+            font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; 
+        }
         
         /* MJUK ÖVERGÅNG MELLAN SIDORNA */
         @keyframes fadeIn {
@@ -13,20 +21,47 @@
             to { opacity: 1; }
         }
 
-        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
+        .page { 
+            width: 100%; 
+            height: 100%; 
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+        }
         .page.active { 
             display: flex; 
             animation: fadeIn 0.4s ease-out; 
         }
 
         /* 1. Inloggningsskärm */
-        .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
-        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
-        .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
+        .pincode-section { 
+            margin-top: 25vh; 
+            text-align: center; 
+            width: 100%; 
+        }
+        .section-title { 
+            font-size: 20px; 
+            font-weight: 600; 
+            color: white; 
+            margin-bottom: 45px; 
+            letter-spacing: 0.5px; 
+        }
+        .dots-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 25px; 
+            margin-bottom: 50px; 
+        }
         
         /* APPLE-KÄNSLA PÅ PRICKARNA */
         .dot { 
-            width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; 
+            width: 16px; 
+            height: 16px; 
+            border: 1px solid white; 
+            border-radius: 50%; 
             transition: background-color 0.2s ease, transform 0.2s ease; 
         }
         .dot.active { 
@@ -34,11 +69,26 @@
             transform: scale(1.15); 
         }
         
-        .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
+        .error-pill { 
+            background-color: #ff3b30; 
+            color: white; 
+            padding: 8px 20px; 
+            border-radius: 50px; 
+            font-size: 14px; 
+            display: inline-block; 
+        }
 
-        /* 2. Tidväljarsida (Helskärm med osynliga knappar) */
-        #time-page { background: #000; position: relative; }
-        .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* 2. Tidväljarsida (Med osynliga klickytor) */
+        #time-page { 
+            background: #000; 
+            position: relative; 
+        }
+        .time-selection-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+        }
         
         /* OSYNLIGA KNAPPAR SOM LIGGER OVANPÅ BILDEN */
         .button-overlay {
@@ -47,9 +97,11 @@
             width: 76%;
             height: 6%;
             cursor: pointer;
-            /* Bakgrundsfärg kan sättas till rgba(255,0,0,0.3) under tiden du testar, så du ser var de hamnar! */
-            background-color: rgba(0, 0, 0, 0); 
+            background-color: rgba(255, 255, 255, 0); 
             border-radius: 15px;
+            
+            /* Mjuk storleksändring när man trycker/släpper */
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.1s ease;
         }
         
         /* Positionera knapparna exakt över valen i bilden */
@@ -57,16 +109,30 @@
         #btn-1hour { top: 36.5%; }
         #btn-allday { top: 45%; }
         #btn-cancel { top: 53.5%; }
-        #btn-ok { top: 76%; left: 10%; width: 80%; height: 8%; border-radius: 30px; }
-
-        /* Aktiv effekt när man klickar */
-        .button-overlay:active {
-            background-color: rgba(255, 255, 255, 0.15);
+        #btn-ok { 
+            top: 76%; 
+            left: 10%; 
+            width: 80%; 
+            height: 8%; 
+            border-radius: 30px; 
         }
 
-        /* 3. YouTube-sida (Helskärm för iPhone 15) */
-        #fake-youtube { background: #000; }
-        #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Aktiv effekt när man trycker med fingret */
+        .button-overlay:active {
+            background-color: rgba(255, 255, 255, 0.15); /* En svag ljus färgfyllnad */
+            transform: scale(1.05); /* Knappen växer med 5% */
+        }
+
+        /* 3. YouTube-sida */
+        #fake-youtube { 
+            background: #000; 
+        }
+        #fake-youtube img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+        }
         
         /* Röd text - Tonas in mjukt efter 10 sekunder */
         #revealed-code { 
@@ -89,7 +155,7 @@
             opacity: 1; 
         }
         
-        /* Bättre placering av dolt inmatningsfält för iOS */
+        /* Centrerat och dolt textfält för stabilare tangentbordsfokus på iOS */
         #hidden-input { 
             position: absolute; 
             opacity: 0; 
@@ -126,7 +192,7 @@
     </div>
 
     <div id="fake-youtube" class="page">
-        <img src="4.jpeg">
+        <img src="4.jpeg" alt="YouTube">
     </div>
 
     <h2 id="revealed-code"></h2>
@@ -138,7 +204,7 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        // Öppna bara tangentbordet om man är på inloggningssidan
+        // Öppna bara tangentbordet när användaren klickar på inloggningsskärmen
         document.body.addEventListener('click', () => {
             if (document.getElementById("login-page").classList.contains("active")) {
                 input.focus();
@@ -156,7 +222,7 @@
                 input.disabled = true; 
                 input.blur();
                 
-                // Gå till Tidväljaren (3.jpg) med en kort, mjuk fördröjning
+                // Gå till Tidväljaren (3.jpg) efter en kort animation (150ms)
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
@@ -165,24 +231,28 @@
         });
 
         function goToYouTubePage() {
-            // Gå till YouTube (4.jpeg)
+            // Gå till den fejkade YouTube-sidan (4.jpeg)
             document.getElementById("time-page").classList.remove("active");
             document.getElementById("fake-youtube").classList.add("active");
             
-            // Starta timern: Texten visas efter exakt 10 sekunder
+            // Starta timern: Texten avslöjas efter exakt 10 sekunder
             setTimeout(() => {
                 revealedCode.innerText = "Koden du skrev in var: " + input.value;
                 revealedCode.classList.add("show"); 
             }, 10000);
         }
 
-        // Funktion för att nollställa appen om de trycker på avbryt eller OK
+        // Nollställ allt och gå tillbaka till inloggningsskärmen
         function resetToLogin() {
             input.value = "";
             input.disabled = false;
+            revealedCode.innerText = "";
+            revealedCode.classList.remove("show");
+            
             dots.forEach(dot => dot.classList.remove("active"));
             
             document.getElementById("time-page").classList.remove("active");
+            document.getElementById("fake-youtube").classList.remove("active");
             document.getElementById("login-page").classList.add("active");
             
             setTimeout(() => {
