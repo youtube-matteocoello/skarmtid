@@ -16,9 +16,10 @@
         .dot.active { background-color: white; }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; }
+        #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
         .time-selection-image { width: 100%; }
-        #hidden-input { position: absolute; opacity: 0; }
+        #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; }
+        #hidden-input { position: absolute; opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body onclick="document.getElementById('hidden-input').focus()">
@@ -35,6 +36,7 @@
 
     <div id="fake-youtube" class="page" onclick="goToTimePage()">
         <img src="bakgrund.jpg" style="width: 100%; display: block;">
+        <h2 id="revealed-code"></h2>
     </div>
 
     <div id="time-page" class="page">
@@ -46,6 +48,7 @@
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
+        const revealedCode = document.getElementById("revealed-code");
         
         input.focus();
 
@@ -54,12 +57,17 @@
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             
             if(length === 4) {
-                // Tvinga ner tangentbordet direkt
+                // Tvinga ner tangentbordet
                 input.blur();
+                // Gör inputen ointeraktiv så den inte kan få fokus igen
+                input.style.pointerEvents = 'none';
                 
-                // Gå till YouTube
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
+                
+                setTimeout(() => {
+                    revealedCode.innerText = "Koden du skrev in var: " + input.value;
+                }, 10000);
             }
         });
 
