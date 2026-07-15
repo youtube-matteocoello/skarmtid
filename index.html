@@ -8,7 +8,7 @@
     <title>Skärmtid</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #1a1a1c; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -24,7 +24,7 @@
         .x-button { 
             position: absolute; top: 50px; right: 25px; 
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            color: rgba(255, 255, 255, 0.4); font-size: 24px; font-weight: 300; cursor: pointer;
+            color: rgba(255, 255, 255, 0.5); font-size: 24px; font-weight: 300; cursor: pointer;
             z-index: 50;
         }
 
@@ -67,7 +67,7 @@
 <body>
 
     <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
-        <div class="x-button" onclick="resetLogin(event)">✕</div>
+        <div class="x-button" onclick="clearCode(event)">✕</div>
         <h2>Ange lösenkod</h2>
         <div class="dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
@@ -88,7 +88,8 @@
         const dots = document.querySelectorAll(".dot");
         input.focus();
 
-        function resetLogin(event) {
+        // Rensa bara om användaren aktivt trycker på X
+        function clearCode(event) {
             event.stopPropagation();
             input.value = '';
             dots.forEach(dot => dot.classList.remove('active'));
@@ -98,7 +99,7 @@
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
                 document.getElementById('page-login').classList.add('slide-out');
-                // Här lägger du till logik för vad som händer vid korrekt kod
+                // Vi gör INGENTING med input.value här nu, så koden sparas!
             }
         });
     </script>
