@@ -2,106 +2,80 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skärmtid</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; }
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Inloggningssida - Exakt Apple Grå */
-        #page-login { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            background: #1a1a1c; z-index: 10; display: flex; 
-        }
+        .active { display: flex; }
 
-        .x-button { 
-            position: absolute; top: 50px; right: 25px; 
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            color: rgba(255, 255, 255, 0.5); font-size: 24px; font-weight: 300; cursor: pointer;
-            z-index: 50;
-        }
+        #page-login { background: #1a1a1c; z-index: 10; }
+        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; z-index: 20; transform: translateX(100%); }
+        #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
 
-        h2 { 
-            color: #fff; font-size: 20px; font-weight: 500; margin-bottom: 25px; 
-            letter-spacing: -0.2px;
-        }
-
-        /* Prickar - Exakt iOS-stil */
-        .dots { display: flex; gap: 16px; margin-bottom: 25px; }
-        .dot { 
-            width: 14px; height: 14px; 
-            border: 1.5px solid rgba(255, 255, 255, 0.3); 
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-        .dot.active { background: #fff; border-color: #fff; }
-
-        /* Felmeddelande */
-        .error-message {
-            color: #ff3b30;
-            font-size: 14px;
-            font-weight: 400;
-        }
-
-        /* Meny och YouTube */
-        #page-menu { 
-            background: #000;
-            z-index: 20; transform: translateX(100%); 
-        }
-        #page-menu.active { display: block; transform: translateX(0); }
-
-        #page-youtube { background: #000; z-index: 30; transform: translateX(100%); }
-        #page-youtube.active { display: block; transform: translateX(0); }
-        #page-youtube img { width: 100%; height: 100%; object-fit: contain; }
-
+        .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
+
+        /* Hitboxarna */
+        .hitbox { 
+            position: absolute; 
+            width: 85%; 
+            height: 70px; 
+            cursor: pointer; 
+            z-index: 40; 
+            background: rgba(255,255,255,0.01);
+        }
+
+        .dots { display: flex; gap: 20px; margin-bottom: 20px; }
+        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
+        .dot.active { background: white; }
     </style>
 </head>
-<body>
-
-    <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
-        <div class="x-button" onclick="clearCode(event)">✕</div>
-        <h2>Ange lösenkod</h2>
-        <div class="dots">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-        <div class="error-message">1 misslyckat lösenordsförsök</div>
+<body> <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
+        <h2 style="color:white">Ange lösenkod för Skärmtid</h2>
+        <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
     <div id="page-menu" class="page">
-        </div>
+        <div class="hitbox" style="top: 310px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 385px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 460px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 535px;" onclick="location.reload()"></div>
+    </div>
 
     <div id="page-youtube" class="page">
-        </div>
+        <img src="nya.jpeg" style="width: 100%; display: block;">
+    </div>
 
-    <input type="tel" id="hidden-input" maxlength="4" style="position:absolute; opacity:0; pointer-events:none;">
+    <input type="tel" id="hidden-input" maxlength="4" autocomplete="off" style="position:absolute; opacity:0; pointer-events:none;">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
+        
+        // Öppna tangentbordet direkt när sidan laddas
         input.focus();
-
-        // Rensa bara om användaren aktivt trycker på X
-        function clearCode(event) {
-            event.stopPropagation();
-            input.value = '';
-            dots.forEach(dot => dot.classList.remove('active'));
-        }
 
         input.addEventListener("input", () => {
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
+                input.blur(); // Tvingar tangentbordet att stängas
                 document.getElementById('page-login').classList.add('slide-out');
-                // Vi gör INGENTING med input.value här nu, så koden sparas!
+                document.getElementById('page-menu').classList.add('active', 'slide-in');
             }
         });
+
+        function goToYouTube() {
+            input.blur(); // Säkerställer att tangentbordet är stängt ifall det spökar
+            document.getElementById('page-menu').classList.add('slide-out');
+            document.getElementById('page-youtube').classList.add('active', 'slide-in');
+        }
     </script>
 </body>
 </html>
