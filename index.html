@@ -12,7 +12,7 @@
     <style>
         body, html { 
             margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; 
-            overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; 
+            overflow: hidden; background: #000; font-family: -apple-system, sans-serif; 
         }
         
         .page { 
@@ -25,9 +25,11 @@
 
         #page-login { background: #1a1a1c; z-index: 10; }
         
+        /* FIXEN: Cover och top center fixar proportionerna */
         #page-menu { 
-            background: url('CcAjd.jpg') no-repeat center center; 
-            background-size: 100% 100%; 
+            background: url('CcAjd.jpg') no-repeat top center; 
+            background-size: cover; 
+            background-color: #000; /* Fyller ut med svart om bilden tar slut i botten */
             z-index: 20; transform: translateX(100%); 
         }
         
