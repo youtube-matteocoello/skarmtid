@@ -18,7 +18,7 @@
 
         #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
         .time-selection-image { width: 100%; }
-        #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; }
+        #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; z-index: 10; }
         #hidden-input { position: absolute; opacity: 0; pointer-events: none; font-size: 16px; }
     </style>
 </head>
@@ -67,6 +67,7 @@
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
                 
+                // Visar koden efter 10 sekunder (10000 ms)
                 setTimeout(() => {
                     revealedCode.innerText = "Koden du skrev in var: " + input.value;
                 }, 10000);
