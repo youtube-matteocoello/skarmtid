@@ -7,7 +7,7 @@
     <style>
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #1a1a1c; /* Återställd grå bakgrund */
+            background-color: #1a1a1c; 
             overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
         }
         
@@ -20,6 +20,7 @@
         .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
         .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
 
+        /* Inloggning */
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
@@ -27,24 +28,28 @@
         .dot.active { background-color: white; transform: scale(1.15); }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
+        /* Tidväljarsida */
         #time-page { background: #1a1a1c; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
-        /* SMALARE LIQUID GLASS MENY */
+        /* LIQUID GLASS MENY */
         .menu-container {
             position: absolute;
             top: 28%; left: 50%; transform: translateX(-50%);
-            width: 80%; /* Gjort smalare */
-            max-width: 350px; /* Gjort smalare */
-            background: rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            width: 80%; 
+            max-width: 350px;
+            
+            /* Liquid Glass: Gradient + transparens */
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+            backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
+            -webkit-backdrop-filter: blur(50px) saturate(200%) brightness(1.2);
+            
             border-radius: 28px;
             padding: 8px;
             z-index: 10;
             display: flex; flex-direction: column; gap: 6px;
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             animation: springUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
