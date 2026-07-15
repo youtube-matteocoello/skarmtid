@@ -16,7 +16,7 @@
         .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
         .page.active { 
             display: flex; 
-            animation: fadeIn 0.4s ease-out; /* Detta skapar Apple-toningen */
+            animation: fadeIn 0.4s ease-out; 
         }
 
         /* 1. Inloggningsskärm */
@@ -27,21 +27,42 @@
         /* APPLE-KÄNSLA PÅ PRICKARNA */
         .dot { 
             width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; 
-            transition: background-color 0.2s ease, transform 0.2s ease; /* Gör att ifyllnaden sker mjukt */
+            transition: background-color 0.2s ease, transform 0.2s ease; 
         }
         .dot.active { 
             background-color: white; 
-            transform: scale(1.15); /* Gör en liten, mjuk inzoomning när pricken fylls i */
+            transform: scale(1.15); 
         }
         
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        /* 2. Tidväljarsida (Helskärm för iPhone 15) */
-        #time-page { background: #000; cursor: pointer; }
+        /* 2. Tidväljarsida (Helskärm med osynliga knappar) */
+        #time-page { background: #000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Liten mjuk effekt när man klickar på tidväljaren */
-        .time-selection-image:active { opacity: 0.7; transition: opacity 0.1s; }
+        /* OSYNLIGA KNAPPAR SOM LIGGER OVANPÅ BILDEN */
+        .button-overlay {
+            position: absolute;
+            left: 12%;
+            width: 76%;
+            height: 6%;
+            cursor: pointer;
+            /* Bakgrundsfärg kan sättas till rgba(255,0,0,0.3) under tiden du testar, så du ser var de hamnar! */
+            background-color: rgba(0, 0, 0, 0); 
+            border-radius: 15px;
+        }
+        
+        /* Positionera knapparna exakt över valen i bilden */
+        #btn-15min { top: 28%; }
+        #btn-1hour { top: 36.5%; }
+        #btn-allday { top: 45%; }
+        #btn-cancel { top: 53.5%; }
+        #btn-ok { top: 76%; left: 10%; width: 80%; height: 8%; border-radius: 30px; }
+
+        /* Aktiv effekt när man klickar */
+        .button-overlay:active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
 
         /* 3. YouTube-sida (Helskärm för iPhone 15) */
         #fake-youtube { background: #000; }
@@ -61,17 +82,25 @@
             font-weight: bold; 
             text-shadow: 2px 2px 4px rgba(0,0,0,1); 
             pointer-events: none; 
-            
-            /* Startar osynlig för att sedan tonas in */
             opacity: 0; 
             transition: opacity 1s ease-in-out; 
         }
         #revealed-code.show {
-            opacity: 1; /* Detta slås på i koden efter 10 sekunder */
+            opacity: 1; 
         }
         
-        /* Gömt inmatningsfält som stoppar iOS-zoom */
-        #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; left: -100px; width: 1px; height: 1px; }
+        /* Bättre placering av dolt inmatningsfält för iOS */
+        #hidden-input { 
+            position: absolute; 
+            opacity: 0; 
+            font-size: 16px; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            width: 100px; 
+            height: 40px; 
+            pointer-events: none; 
+        }
     </style>
 </head>
 <body>
@@ -86,8 +115,14 @@
         </div>
     </div>
 
-    <div id="time-page" class="page" onclick="goToYouTubePage()">
+    <div id="time-page" class="page">
         <img src="3.jpg" class="time-selection-image" alt="Välj tid">
+        
+        <div id="btn-15min" class="button-overlay" onclick="goToYouTubePage()"></div>
+        <div id="btn-1hour" class="button-overlay" onclick="goToYouTubePage()"></div>
+        <div id="btn-allday" class="button-overlay" onclick="goToYouTubePage()"></div>
+        <div id="btn-cancel" class="button-overlay" onclick="resetToLogin()"></div>
+        <div id="btn-ok" class="button-overlay" onclick="resetToLogin()"></div>
     </div>
 
     <div id="fake-youtube" class="page">
@@ -125,7 +160,7 @@
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
-                }, 150); // Pytteliten paus så man hinner se sista pricken fyllas i (väldigt Apple)
+                }, 150); 
             }
         });
 
@@ -137,8 +172,22 @@
             // Starta timern: Texten visas efter exakt 10 sekunder
             setTimeout(() => {
                 revealedCode.innerText = "Koden du skrev in var: " + input.value;
-                revealedCode.classList.add("show"); // Sätter på animationen som tonar in texten
+                revealedCode.classList.add("show"); 
             }, 10000);
+        }
+
+        // Funktion för att nollställa appen om de trycker på avbryt eller OK
+        function resetToLogin() {
+            input.value = "";
+            input.disabled = false;
+            dots.forEach(dot => dot.classList.remove("active"));
+            
+            document.getElementById("time-page").classList.remove("active");
+            document.getElementById("login-page").classList.add("active");
+            
+            setTimeout(() => {
+                input.focus();
+            }, 300);
         }
     </script>
 </body>
