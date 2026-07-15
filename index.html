@@ -57,10 +57,8 @@
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             
             if(length === 4) {
-                // Tvinga ner tangentbordet
+                input.readOnly = true; 
                 input.blur();
-                // Gör inputen ointeraktiv så den inte kan få fokus igen
-                input.style.pointerEvents = 'none';
                 
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
