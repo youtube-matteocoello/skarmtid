@@ -5,22 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skärmtid</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; background-color: #1a1a1c; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; color: white; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; background-color: #1a1a1c; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
         
         .page { width: 100%; max-width: 450px; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; }
         .page.active { display: flex; }
 
         /* Låsskärm */
         .pincode-section { margin-top: 200px; text-align: center; width: 100%; }
-        .section-title { font-size: 20px; font-weight: 600; margin-bottom: 45px; }
+        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background-color: white; }
-        .error-pill { background-color: #ff3b30; padding: 8px 20px; border-radius: 50px; font-size: 14px; }
+        .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        /* Tidväljare */
-        .time-picker { margin-top: 150px; width: 80%; }
-        .time-option { background: #333; padding: 20px; margin: 10px 0; border-radius: 15px; text-align: center; cursor: pointer; font-size: 18px; }
+        /* Tidväljare Bild */
+        .time-selection-image { width: 100%; cursor: pointer; }
 
         /* Fake YouTube */
         #fake-youtube { background: #000; overflow-y: auto; }
@@ -39,13 +38,8 @@
         </div>
     </div>
 
-    <div id="time-page" class="page">
-        <div class="time-picker">
-            <h2 style="text-align:center; margin-bottom:30px;">Välj tillåten tid</h2>
-            <div class="time-option" onclick="goToYoutube()">15 minuter</div>
-            <div class="time-option" onclick="goToYoutube()">1 timme</div>
-            <div class="time-option" onclick="goToYoutube()">Hela dagen</div>
-        </div>
+    <div id="time-page" class="page" onclick="goToYoutube()">
+        <img src="tidval.jpg" class="time-selection-image" alt="Välj tid">
     </div>
 
     <div id="fake-youtube" class="page">
