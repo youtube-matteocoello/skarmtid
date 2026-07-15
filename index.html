@@ -7,7 +7,7 @@
     <style>
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #000000; /* Helt svart bakgrund för djup */
+            background-color: #000000; 
             overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
         }
         
@@ -25,29 +25,29 @@
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         .dot { width: 16px; height: 16px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; transition: 0.2s; }
         .dot.active { background-color: white; transform: scale(1.15); }
+        
+        /* Tunnare textvikt för felmeddelandet */
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; font-weight: 400; }
 
         #time-page { background: #000000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
-        /* DEEP DARK MODE - LIQUID GLASS */
+        /* RUNDAD DEEP DARK LIQUID GLASS MENY */
         .menu-container {
             position: absolute;
             top: 28%; left: 50%; transform: translateX(-50%);
             width: 80%; 
             max-width: 350px;
             
-            /* Mörk, transparent bas (iOS Dark Mode standard) */
             background: rgba(28, 28, 30, 0.75); 
             backdrop-filter: blur(60px) saturate(180%);
             -webkit-backdrop-filter: blur(60px) saturate(180%);
             
-            border-radius: 28px;
-            padding: 8px;
+            border-radius: 40px; /* Rundare form */
+            padding: 12px;
             z-index: 10;
-            display: flex; flex-direction: column; gap: 6px;
+            display: flex; flex-direction: column; gap: 8px;
             
-            /* Subtil kant som fångar ljus mot svart bakgrund */
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
                         inset 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -57,8 +57,9 @@
 
         .system-button {
             width: 100%; height: 54px;
-            background-color: rgba(255, 255, 255, 0.08); /* Mörk knappton */
-            border-radius: 16px; border: none;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 28px; /* Matchar rundare form */
+            border: none;
             color: #ffffff; font-size: 17px; font-weight: 500;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: background 0.2s;
