@@ -19,8 +19,6 @@
         #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
         .time-selection-image { width: 100%; }
         #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; }
-        
-        /* FIX: font-size 16px stoppar auto-zoom på iPhone */
         #hidden-input { position: absolute; opacity: 0; pointer-events: none; font-size: 16px; }
     </style>
 </head>
@@ -37,12 +35,12 @@
     </div>
 
     <div id="fake-youtube" class="page" onclick="goToTimePage()">
-        <img src="bakgrund.jpg" style="width: 100%; display: block;">
+        <img src="4.jpeg" style="width: 100%; display: block;">
         <h2 id="revealed-code"></h2>
     </div>
 
     <div id="time-page" class="page">
-        <img src="630BAEBF-D92C-4B50-928D-D7AFAC85348A.jpeg" class="time-selection-image" alt="Välj tid">
+        <img src="3.jpg" class="time-selection-image" alt="Välj tid">
     </div>
 
     <input type="tel" id="hidden-input" maxlength="4">
@@ -52,7 +50,6 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        // Aktivera inputen när man klickar på sidan
         document.body.addEventListener('click', () => {
             input.style.pointerEvents = 'auto';
             input.focus();
