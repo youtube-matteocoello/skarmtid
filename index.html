@@ -12,9 +12,10 @@
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
+        /* Denna körs nu bara på wrappern */
         @keyframes springUp { 
-            0% { transform: translateY(35px) scale(0.98); opacity: 0; } 
-            100% { transform: translateY(0) scale(1); opacity: 1; } 
+            0% { transform: translateY(35px); opacity: 0; } 
+            100% { transform: translateY(0); opacity: 1; } 
         }
 
         .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
@@ -34,42 +35,52 @@
         
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
         
-        /* 3D LIQUID GLASS-MENYN */
-        .menu-container {
+        /* NY WRAPPER: Tar hand om start-animationen så att menyn kan röra sig fritt efteråt */
+        .menu-wrapper {
             position: absolute;
             top: 24.2%; 
             width: 82%;
-            background: linear-gradient(135deg, rgba(40, 40, 45, 0.45) 0%, rgba(20, 20, 25, 0.35) 100%);
+            z-index: 10;
+            animation: springUp 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        
+        /* 3D LIQUID GLASS-MENYN */
+        .menu-container {
+            width: 100%;
+            /* Ljus gradient uppe till vänster simulerar ljusreflektion i fysiskt glas */
+            background: radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), 
+                        linear-gradient(135deg, rgba(40, 40, 45, 0.4) 0%, rgba(20, 20, 25, 0.3) 100%);
             border-radius: 38px;
             padding: 45px 16px; 
             box-sizing: border-box;
-            z-index: 10;
             display: flex;
             flex-direction: column;
             gap: 18px;
             
-            border: 0.5px solid rgba(255, 255, 255, 0.18);
+            /* Högre opacitet på kanten för den där skarpa slipade glaskanten */
+            border: 0.5px solid rgba(255, 255, 255, 0.22);
             box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.6),
-                inset 0 1px 1px rgba(255, 255, 255, 0.2),
-                inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.2);
                 
-            backdrop-filter: blur(45px) saturate(250%) brightness(1.1);
-            -webkit-backdrop-filter: blur(45px) saturate(250%) brightness(1.1);
+            backdrop-filter: blur(40px) saturate(220%) brightness(1.15) contrast(95%);
+            -webkit-backdrop-filter: blur(40px) saturate(220%) brightness(1.15) contrast(95%);
             
-            animation: springUp 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            
-            /* Lade till en mjuk övergång så att HILA rutan kan animeras */
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2), box-shadow 0.4s ease;
+            /* Extremt följsam transition frigjord från Safari-buggen! */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, background-color 0.4s ease;
+            transform: scale(1);
         }
         
-        /* Denna klass appliceras på hela menyn när du rör/drar på den */
+        /* När fingret rör menyn lyfter hela glaset mjukt */
         .menu-container.menu-drag-active {
-            transform: scale(1.02) !important; 
+            transform: scale(1.03); 
+            background-color: rgba(45, 45, 50, 0.35);
             box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.75), /* Kraftigare ytterskugga när den lyfts */
-                inset 0 1px 1px rgba(255, 255, 255, 0.25),
-                inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+                0 40px 80px rgba(0, 0, 0, 0.65), 
+                inset 0 1.5px 1.5px rgba(255, 255, 255, 0.45),
+                inset 0 -1.5px 1.5px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease, background-color 0.15s ease;
         }
         
         .system-button {
@@ -78,7 +89,7 @@
             border-radius: 30px;
             border: none;
             outline: none;
-            background-color: rgba(255, 255, 255, 0.08); 
+            background-color: rgba(255, 255, 255, 0.07); 
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -92,15 +103,17 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
             
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2), background-color 0.3s ease, box-shadow 0.3s ease;
+            /* "Fjädrar" tillbaka mjukt när man drar bort fingret */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .system-button:active, .system-button.drag-active {
-            background-color: rgba(255, 255, 255, 0.2); 
+        /* Knappen växer snabbt och exakt när fingret är rakt över den */
+        .system-button.drag-active {
+            background-color: rgba(255, 255, 255, 0.16); 
             transform: scale(1.05); 
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.15);
             
-            transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1), background-color 0.1s ease, box-shadow 0.1s ease;
+            transition: transform 0.12s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.1s ease, box-shadow 0.1s ease;
         }
 
         /* 3. YouTube-sida */
@@ -130,11 +143,13 @@
     <div id="time-page" class="page">
         <img src="ios2.png" class="time-selection-image" alt="Välj tid">
         
-        <div class="menu-container" id="ios-menu">
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
-            <button class="system-button" onclick="resetToLogin()">Avbryt</button>
+        <div class="menu-wrapper">
+            <div class="menu-container" id="ios-menu">
+                <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
+                <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
+                <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
+                <button class="system-button" onclick="resetToLogin()">Avbryt</button>
+            </div>
         </div>
     </div>
 
@@ -195,29 +210,50 @@
             setTimeout(() => { input.focus(); }, 300);
         }
 
+        /* --- DETALJERAD TOUCH-SPÅRNING --- */
         const iosMenu = document.getElementById('ios-menu');
         const menuButtons = document.querySelectorAll('.system-button');
 
-        // När du sätter fingret på menyn
+        // Funktion för att hitta knapp under fingret
+        function getButtonAtTouch(touch) {
+            let target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target) {
+                return target.closest('.system-button');
+            }
+            return null;
+        }
+
+        // När du sätter fingret på menyn (eller dess knappar)
         iosMenu.addEventListener('touchstart', (e) => {
-            // Hela menyn "lyfter"
+            // Aktivera lyft-effekt på hela rutan omedelbart
             iosMenu.classList.add('menu-drag-active'); 
             
             const touch = e.touches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (target && target.classList.contains('system-button')) {
-                target.classList.add('drag-active');
-            }
+            const activeBtn = getButtonAtTouch(touch);
+            
+            menuButtons.forEach(btn => {
+                if (btn === activeBtn) {
+                    btn.classList.add('drag-active');
+                } else {
+                    btn.classList.remove('drag-active');
+                }
+            });
         }, { passive: true });
 
-        // Spårar fingret när du drar det (aktiverar rätt knapp)
+        // När du drar fingret runt i menyn
         iosMenu.addEventListener('touchmove', (e) => {
-            e.preventDefault(); 
+            if (e.cancelable) {
+                e.preventDefault(); // Förhindrar Safari-skärmscroll
+            }
+            
             const touch = e.touches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const activeBtn = getButtonAtTouch(touch);
+
+            // Menyn förblir upplyft och aktiv under dragningen
+            iosMenu.classList.add('menu-drag-active');
 
             menuButtons.forEach(btn => {
-                if (btn === target) {
+                if (btn === activeBtn) {
                     btn.classList.add('drag-active');
                 } else {
                     btn.classList.remove('drag-active');
@@ -227,23 +263,23 @@
 
         // När du släpper fingret
         iosMenu.addEventListener('touchend', (e) => {
-            // Återställ menyns "lyft"
+            // Sänk ner hela menyn mjukt igen
             iosMenu.classList.remove('menu-drag-active'); 
             
             const touch = e.changedTouches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const activeBtn = getButtonAtTouch(touch);
 
-            // Återställ alla knappar
+            // Återställ alla knappars storlekar
             menuButtons.forEach(btn => btn.classList.remove('drag-active'));
 
-            // Klicka på knappen du släppte fingret över
-            if (target && target.classList.contains('system-button')) {
+            // Aktivera knappen du faktiskt släppte på
+            if (activeBtn) {
                 e.preventDefault(); 
-                target.click(); 
+                activeBtn.click(); 
             }
         });
 
-        // Säkerhetsåtgärd om fingret glider utanför skärmen eller avbryts av systemet
+        // Säkerhetsåtgärd om touchen avbryts av iOS-systemet
         iosMenu.addEventListener('touchcancel', () => {
             iosMenu.classList.remove('menu-drag-active');
             menuButtons.forEach(btn => btn.classList.remove('drag-active'));
