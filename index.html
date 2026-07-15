@@ -7,18 +7,16 @@
     <style>
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #1a1a1c; /* Återställd till din favoritgrå */
+            background-color: #1a1a1c !important; 
             overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
         }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes springUp { 
-            0% { transform: translate(-50%, 15%) scale(0.95); opacity: 0; } 
-            100% { transform: translate(-50%, 0) scale(1); opacity: 1; } 
+        .page { 
+            width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; 
+            position: absolute; top: 0; left: 0; 
+            transition: opacity 0.5s ease; opacity: 0; 
         }
-
-        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
-        .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
+        .page.active { display: flex; opacity: 1; }
 
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
@@ -27,48 +25,33 @@
         .dot.active { background-color: white; transform: scale(1.15); }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; font-weight: 400; }
 
-        #time-page { background: #1a1a1c; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
-        /* MÖRK MENY (DARK MODE) PÅ GRÅ BAKGRUND */
         .menu-container {
-            position: absolute;
-            top: 28%; left: 50%; transform: translateX(-50%);
-            width: 80%; 
-            max-width: 350px;
-            
-            /* Mörk, transparent bas */
+            position: absolute; top: 28%; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 350px;
             background: rgba(28, 28, 30, 0.75); 
             backdrop-filter: blur(60px) saturate(180%);
-            -webkit-backdrop-filter: blur(60px) saturate(180%);
-            
-            border-radius: 50px; 
-            padding: 16px;
-            z-index: 10;
+            border-radius: 50px; padding: 16px; z-index: 10;
             display: flex; flex-direction: column; gap: 10px;
-            
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            
-            animation: springUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
         }
 
         .system-button {
             width: 100%; height: 54px;
             background-color: rgba(255, 255, 255, 0.08);
-            border-radius: 32px; 
-            border: none;
+            border-radius: 32px; border: none;
             color: #ffffff; font-size: 17px; font-weight: 500;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: background 0.2s;
         }
-        .system-button.drag-active { background-color: rgba(255, 255, 255, 0.15); }
+        .system-button.drag-active { background-color: rgba(255, 255, 255, 0.15); transform: scale(0.98); }
 
         #fake-youtube { background: #1a1a1c; }
         #fake-youtube img { width: 100%; height: 100%; object-fit: cover; }
-        #revealed-code { color: #ff3b30; text-align: center; position: absolute; bottom: 50px; left: 0; right: 0; font-size: 20px; z-index: 999; opacity: 0; transition: 1s; }
-        #revealed-code.show { opacity: 1; }
+        
         #hidden-input { position: absolute; opacity: 0; pointer-events: none; }
     </style>
 </head>
@@ -87,9 +70,9 @@
     <div id="time-page" class="page">
         <img src="ios2.png" class="time-selection-image" alt="Välj tid">
         <div class="menu-container" id="ios-menu">
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
+            <button class="system-button" onclick="loadYoutube()">Godkänn i 15 minuter</button>
+            <button class="system-button" onclick="loadYoutube()">Godkänn i en timme</button>
+            <button class="system-button" onclick="loadYoutube()">Godkänn hela dagen</button>
             <button class="system-button" onclick="resetToLogin()">Avbryt</button>
         </div>
     </div>
@@ -98,17 +81,11 @@
         <img src="4.jpeg" alt="YouTube">
     </div>
 
-    <h2 id="revealed-code"></h2>
     <input type="tel" id="hidden-input" maxlength="4">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
-        const revealedCode = document.getElementById("revealed-code");
-        const iosMenu = document.getElementById('ios-menu');
-        const menuButtons = document.querySelectorAll('.system-button');
-
-        document.body.addEventListener('click', () => { if(document.getElementById("login-page").classList.contains("active")) input.focus(); });
         input.focus();
 
         input.addEventListener("input", () => {
@@ -119,40 +96,24 @@
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
-                }, 300);
+                }, 400);
             }
         });
 
-        function getButtonAtTouch(touch) {
-            let target = document.elementFromPoint(touch.clientX, touch.clientY);
-            return target ? target.closest('.system-button') : null;
-        }
-
-        iosMenu.addEventListener('touchmove', (e) => {
-            const activeBtn = getButtonAtTouch(e.touches[0]);
-            menuButtons.forEach(btn => btn.classList.toggle('drag-active', btn === activeBtn));
-        }, { passive: true });
-
-        iosMenu.addEventListener('touchend', (e) => {
-            menuButtons.forEach(btn => btn.classList.remove('drag-active'));
-            const activeBtn = getButtonAtTouch(e.changedTouches[0]);
-            if (activeBtn) activeBtn.click();
-        });
-
-        function goToYouTubePage() {
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.add("active");
-            setTimeout(() => { revealedCode.innerText = "Koden var: " + input.value; revealedCode.classList.add("show"); }, 4000);
+        function loadYoutube() {
+            // Skapar en "laddningskänsla"
+            const menu = document.getElementById('ios-menu');
+            menu.style.transform = "translateX(-50%) scale(0.95)";
+            menu.style.opacity = "0";
+            
+            setTimeout(() => {
+                document.getElementById("time-page").classList.remove("active");
+                document.getElementById("fake-youtube").classList.add("active");
+            }, 600);
         }
 
         function resetToLogin() {
-            input.value = ""; input.disabled = false;
-            revealedCode.innerText = ""; revealedCode.classList.remove("show");
-            dots.forEach(dot => dot.classList.remove("active"));
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.remove("active");
-            document.getElementById("login-page").classList.add("active");
-            setTimeout(() => input.focus(), 400);
+            location.reload(); // Enkelt sätt att nollställa allt helt
         }
     </script>
 </body>
