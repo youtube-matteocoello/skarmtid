@@ -10,25 +10,22 @@
     
     <title>Skärmtid</title>
     <style>
-        /* Fixar så ingenting kan scrollas av misstag och tvingar 100% höjd */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; 
-            -webkit-touch-callout: none; 
-            -webkit-user-select: none;
+            -webkit-touch-callout: none; -webkit-user-select: none;
         }
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; 
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: none; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Endast inloggningssidan behöver centreras med flex */
+        /* Inloggningssidan */
         #page-login.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
         #page-login { background: #1a1a1c; z-index: 10; }
 
-        /* Meny-sidan - tvingar exakt storlek utan att klippa */
+        /* Meny-sidan - Bilden sträcker ut sig exakt */
         #page-menu { 
             background: url('CcAjd.jpg') no-repeat center center; 
             background-size: 100% 100%; 
@@ -36,22 +33,19 @@
         }
         #page-menu.active { display: block; }
 
-        /* YouTube-sidan */
-        #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
+        /* YouTube-sidan - Bilden fyller hela ytan utan kanter */
+        #page-youtube { background: #000; z-index: 30; transform: translateX(100%); }
         #page-youtube.active { display: block; }
-        #page-youtube img { width: 100%; height: auto; display: block; }
+        #page-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* Animationer */
         .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
 
-        /* Hitboxarna använder nu procent för att alltid ligga rätt! */
+        /* Hitboxar i procent för att alltid ligga rätt */
         .hitbox { 
             position: absolute; left: 10%; width: 80%; height: 7.5%; 
-            cursor: pointer; z-index: 40; border-radius: 15px;
+            cursor: pointer; z-index: 40; border-radius: 15px; background: rgba(255,255,255,0.01);
         }
-        
-        /* Ger det lilla ljusa klick-flimret precis som iOS */
         .hitbox:active { background: rgba(255,255,255,0.1); }
 
         .dots { display: flex; gap: 20px; margin-bottom: 20px; }
