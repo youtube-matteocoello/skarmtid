@@ -12,7 +12,7 @@
             height: 100%; 
             background-color: #1a1a1c; 
             overflow: hidden; 
-            font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; 
         }
         
         /* MJUK ÖVERGÅNG MELLAN SIDORNA */
@@ -78,7 +78,7 @@
             display: inline-block; 
         }
 
-        /* 2. Tidväljarsida (Med osynliga klickytor) */
+        /* 2. Tidväljarsida */
         #time-page { 
             background: #000; 
             position: relative; 
@@ -90,37 +90,67 @@
             display: block; 
         }
         
-        /* OSYNLIGA KNAPPAR SOM LIGGER OVANPÅ BILDEN */
+        /* DESSA KNAPPAR MATCHAR BILDEN EXAKT OCH TÄCKER DE ICKE-FUNGERANDE */
         .button-overlay {
             position: absolute;
-            left: 12%;
-            width: 76%;
-            height: 6%;
+            left: 12.5%;
+            width: 75%;
+            height: 5.8%;
             cursor: pointer;
-            background-color: rgba(255, 255, 255, 0); 
-            border-radius: 15px;
+            border-radius: 18px;
+            border: none;
+            outline: none;
+            
+            /* iOS Mörkgrå färg (SystemGray4) */
+            background-color: #2c2c2e; 
+            
+            /* Textstil som på bilden */
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            
+            /* Centrera texten inuti knappen */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            
+            /* Förhindra blå markeringsram på mobiler */
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
             
             /* Mjuk storleksändring när man trycker/släpper */
             transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.1s ease;
         }
         
         /* Positionera knapparna exakt över valen i bilden */
-        #btn-15min { top: 28%; }
-        #btn-1hour { top: 36.5%; }
-        #btn-allday { top: 45%; }
-        #btn-cancel { top: 53.5%; }
+        #btn-15min { top: 28.2%; }
+        #btn-1hour { top: 36.7%; }
+        #btn-allday { top: 45.1%; }
+        #btn-cancel { top: 53.6%; }
+        
+        /* Den blåa iOS "OK"-knappen längst ner */
         #btn-ok { 
-            top: 76%; 
-            left: 10%; 
-            width: 80%; 
-            height: 8%; 
-            border-radius: 30px; 
+            top: 75.8%; 
+            left: 9.5%; 
+            width: 81%; 
+            height: 7.2%; 
+            border-radius: 40px; 
+            background-color: #007aff; /* Apple Blue */
+            font-weight: 600;
+            font-size: 18px;
         }
 
-        /* Aktiv effekt när man trycker med fingret */
+        /* KNAPPEN BLIR STÖRRE NÄR MAN TRYCKER */
         .button-overlay:active {
-            background-color: rgba(255, 255, 255, 0.15); /* En svag ljus färgfyllnad */
-            transform: scale(1.05); /* Knappen växer med 5% */
+            transform: scale(1.05); /* Växer med 5% vid tryck */
+            background-color: #3a3a3c; /* Blir något ljusare grå */
+        }
+        
+        /* Särskild tryck-effekt för den blåa OK-knappen */
+        #btn-ok:active {
+            background-color: #1485ff; /* Ljusare blå vid tryck */
         }
 
         /* 3. YouTube-sida */
@@ -184,11 +214,11 @@
     <div id="time-page" class="page">
         <img src="3.jpg" class="time-selection-image" alt="Välj tid">
         
-        <div id="btn-15min" class="button-overlay" onclick="goToYouTubePage()"></div>
-        <div id="btn-1hour" class="button-overlay" onclick="goToYouTubePage()"></div>
-        <div id="btn-allday" class="button-overlay" onclick="goToYouTubePage()"></div>
-        <div id="btn-cancel" class="button-overlay" onclick="resetToLogin()"></div>
-        <div id="btn-ok" class="button-overlay" onclick="resetToLogin()"></div>
+        <button id="btn-15min" class="button-overlay" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
+        <button id="btn-1hour" class="button-overlay" onclick="goToYouTubePage()">Godkänn i en timme</button>
+        <button id="btn-allday" class="button-overlay" onclick="goToYouTubePage()">Godkänn hela dagen</button>
+        <button id="btn-cancel" class="button-overlay" onclick="resetToLogin()">Avbryt</button>
+        <button id="btn-ok" class="button-overlay" onclick="resetToLogin()">OK</button>
     </div>
 
     <div id="fake-youtube" class="page">
