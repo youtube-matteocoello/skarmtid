@@ -16,7 +16,7 @@
         .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
         .page.active { 
             display: flex; 
-            animation: fadeIn 0.4s ease-out; /* Detta skapar Apple-toningen */
+            animation: fadeIn 0.4s ease-out; 
         }
 
         /* 1. Inloggningsskärm */
@@ -27,21 +27,38 @@
         /* APPLE-KÄNSLA PÅ PRICKARNA */
         .dot { 
             width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; 
-            transition: background-color 0.2s ease, transform 0.2s ease; /* Gör att ifyllnaden sker mjukt */
+            transition: background-color 0.2s ease, transform 0.2s ease;
         }
         .dot.active { 
             background-color: white; 
-            transform: scale(1.15); /* Gör en liten, mjuk inzoomning när pricken fylls i */
+            transform: scale(1.15); 
         }
         
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
         /* 2. Tidväljarsida (Helskärm för iPhone 15) */
-        #time-page { background: #000; cursor: pointer; }
+        #time-page { background: #000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Liten mjuk effekt när man klickar på tidväljaren */
-        .time-selection-image:active { opacity: 0.7; transition: opacity 0.1s; }
+        /* INTERAKTIVA KNAPPAR (Den osynliga zonen) */
+        .interactive-buttons-zone {
+            position: absolute;
+            bottom: 5%; /* Placerad nära botten av skärmen */
+            left: 5%;
+            width: 90%;
+            height: 35%; /* Täcker den nedre tredjedelen där knapparna brukar vara */
+            z-index: 10;
+            border-radius: 16px;
+            cursor: pointer;
+            /* Förhindrar att zonen markerar text av misstag */
+            -webkit-tap-highlight-color: transparent; 
+            transition: background-color 0.15s ease;
+        }
+        
+        /* Ger en snygg "Apple-nedmörkning" precis när man trycker på knapparna */
+        .interactive-buttons-zone:active {
+            background-color: rgba(0, 0, 0, 0.2); 
+        }
 
         /* 3. YouTube-sida (Helskärm för iPhone 15) */
         #fake-youtube { background: #000; }
@@ -62,12 +79,11 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,1); 
             pointer-events: none; 
             
-            /* Startar osynlig för att sedan tonas in */
             opacity: 0; 
             transition: opacity 1s ease-in-out; 
         }
         #revealed-code.show {
-            opacity: 1; /* Detta slås på i koden efter 10 sekunder */
+            opacity: 1; 
         }
         
         /* Gömt inmatningsfält som stoppar iOS-zoom */
@@ -86,8 +102,10 @@
         </div>
     </div>
 
-    <div id="time-page" class="page" onclick="goToYouTubePage()">
+    <div id="time-page" class="page">
         <img src="3.jpg" class="time-selection-image" alt="Välj tid">
+        
+        <div class="interactive-buttons-zone" onclick="goToYouTubePage()"></div>
     </div>
 
     <div id="fake-youtube" class="page">
@@ -103,7 +121,7 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
-        // Öppna bara tangentbordet om man är på inloggningssidan
+        // Öppna tangentbordet vid klick PÅ LOGIN-SIDAN
         document.body.addEventListener('click', () => {
             if (document.getElementById("login-page").classList.contains("active")) {
                 input.focus();
@@ -125,7 +143,7 @@
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
-                }, 150); // Pytteliten paus så man hinner se sista pricken fyllas i (väldigt Apple)
+                }, 150); 
             }
         });
 
@@ -137,7 +155,7 @@
             // Starta timern: Texten visas efter exakt 10 sekunder
             setTimeout(() => {
                 revealedCode.innerText = "Koden du skrev in var: " + input.value;
-                revealedCode.classList.add("show"); // Sätter på animationen som tonar in texten
+                revealedCode.classList.add("show");
             }, 10000);
         }
     </script>
