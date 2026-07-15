@@ -2,10 +2,18 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a1a1c">
+    
     <title>Skärmtid</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; }
+        body, html { 
+            margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; 
+            overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; 
+        }
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -16,13 +24,18 @@
         .active { display: flex; }
 
         #page-login { background: #1a1a1c; z-index: 10; }
-        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; z-index: 20; transform: translateX(100%); }
+        
+        #page-menu { 
+            background: url('CcAjd.jpg') no-repeat center center; 
+            background-size: 100% 100%; 
+            z-index: 20; transform: translateX(100%); 
+        }
+        
         #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
 
         .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
 
-        /* Hitboxarna */
         .hitbox { 
             position: absolute; 
             width: 85%; 
@@ -37,7 +50,9 @@
         .dot.active { background: white; }
     </style>
 </head>
-<body> <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
+<body>
+
+    <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
         <h2 style="color:white">Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
@@ -59,20 +74,19 @@
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
         
-        // Öppna tangentbordet direkt när sidan laddas
         input.focus();
 
         input.addEventListener("input", () => {
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
-                input.blur(); // Tvingar tangentbordet att stängas
+                input.blur(); 
                 document.getElementById('page-login').classList.add('slide-out');
                 document.getElementById('page-menu').classList.add('active', 'slide-in');
             }
         });
 
         function goToYouTube() {
-            input.blur(); // Säkerställer att tangentbordet är stängt ifall det spökar
+            input.blur(); 
             document.getElementById('page-menu').classList.add('slide-out');
             document.getElementById('page-youtube').classList.add('active', 'slide-in');
         }
