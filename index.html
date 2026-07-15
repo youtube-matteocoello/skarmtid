@@ -2,17 +2,21 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#1a1a1c">
+    <meta name="theme-color" content="#000000">
     
     <title>Skärmtid</title>
     <style>
+        /* Tvingar bort alla marginaler och låser storleken */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background: #1a1a1c; font-family: -apple-system, sans-serif; 
+            width: 100%; height: 100%; 
+            overflow: hidden; background: #000; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             -webkit-touch-callout: none; -webkit-user-select: none;
         }
         
@@ -21,11 +25,11 @@
             display: none; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Inloggningssidan */
+        /* Sida 1: Inloggning */
         #page-login.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
         #page-login { background: #1a1a1c; z-index: 10; }
 
-        /* Meny-sidan - Uppdaterad med din nya bild */
+        /* Sida 2: Meny - Bilden täcker allt */
         #page-menu { 
             background: url('Ku4IH (1).jpg') no-repeat center center; 
             background-size: cover; 
@@ -33,18 +37,19 @@
         }
         #page-menu.active { display: block; }
 
-        /* YouTube-sidan */
+        /* Sida 3: YouTube */
         #page-youtube { background: #000; z-index: 30; transform: translateX(100%); }
         #page-youtube.active { display: block; }
-        #page-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        #page-youtube img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
+        /* Animationer */
         .slide-in { transform: translateX(0) !important; }
         .slide-out { transform: translateX(-100%) !important; }
 
-        /* Hitboxar i procent (justera top-värdena om knapparna hamnat fel med den nya bilden) */
+        /* Hitboxar i procent (viktigt: dessa ligger nu i % för att följa skärmen) */
         .hitbox { 
-            position: absolute; left: 10%; width: 80%; height: 7.5%; 
-            cursor: pointer; z-index: 40; border-radius: 15px; background: rgba(255,255,255,0.01);
+            position: absolute; left: 10%; width: 80%; height: 7%; 
+            cursor: pointer; z-index: 40; 
         }
         .hitbox:active { background: rgba(255,255,255,0.1); }
 
@@ -56,7 +61,7 @@
 <body>
 
     <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
-        <h2 style="color:white">Ange lösenkod för Skärmtid</h2>
+        <h2 style="color:white; margin-bottom: 20px;">Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
@@ -68,16 +73,19 @@
     </div>
 
     <div id="page-youtube" class="page">
-        <img src="nya.jpeg">
+        <img src="nya.jpeg" alt="Innehåll">
     </div>
 
-    <input type="tel" id="hidden-input" maxlength="4" autocomplete="off" style="position:absolute; opacity:0; pointer-events:none;">
+    <input type="tel" id="hidden-input" maxlength="4" inputmode="numeric" autocomplete="off" style="position:absolute; opacity:0; pointer-events:none;">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
         
         input.focus();
+
+        // Gör så att det alltid går att klicka för att få fram tangentbordet
+        document.body.addEventListener('click', () => input.focus());
 
         input.addEventListener("input", () => {
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
