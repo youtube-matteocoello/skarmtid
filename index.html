@@ -100,33 +100,33 @@
             z-index: 1;
         }
         
-        /* DEN IDENTISKA MENYBOXEN (Placeras perfekt över bilden) */
+        /* DEN IDENTISKA MENYBOXEN (Gjord längre för att passa perfekt) */
         .menu-container {
             position: absolute;
-            top: 24.5%; /* Placerad exakt där rutan ligger i gränssnittet */
+            top: 24.2%; /* Justerad position */
             width: 82%;
-            background-color: rgba(28, 28, 30, 0.94); /* iOS mörkt gränssnitt med lätt transparens */
+            background-color: rgba(28, 28, 30, 0.94); 
             border-radius: 38px;
-            padding: 16px;
+            padding: 20px 16px; /* Mer luft i över- och underkant */
             box-sizing: border-box;
             z-index: 10;
             display: flex;
             flex-direction: column;
-            gap: 11px;
+            gap: 14px; /* Lite större avstånd mellan knapparna */
             border: 0.5px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
         
-        /* DE IDENTISKA SYSTEMKNAPPARNA */
+        /* DE IDENTISKA SYSTEMKNAPPARNA (Nu högre och fylligare) */
         .system-button {
             width: 100%;
-            height: 52px;
-            border-radius: 26px;
+            height: 60px; /* Ökad höjd från 52px till 60px */
+            border-radius: 30px; /* Justerad rundning för att matcha höjden */
             border: none;
             outline: none;
-            background-color: rgba(255, 255, 255, 0.08); /* Diskret iOS-grå */
+            background-color: rgba(255, 255, 255, 0.08); 
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 18px;
@@ -143,8 +143,8 @@
         
         /* EFFEKT NÄR MAN TRYCKER */
         .system-button:active {
-            background-color: rgba(255, 255, 255, 0.16); /* Blir ljusare grå vid tryck */
-            transform: scale(0.98); /* Trycks in minimalt och elastiskt */
+            background-color: rgba(255, 255, 255, 0.16); 
+            transform: scale(0.98); 
         }
 
         /* 3. YouTube-sida */
