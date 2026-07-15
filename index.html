@@ -25,14 +25,12 @@
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
         .dot { width: 16px; height: 16px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; transition: 0.2s; }
         .dot.active { background-color: white; transform: scale(1.15); }
-        
-        /* Tunnare textvikt för felmeddelandet */
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; font-weight: 400; }
 
         #time-page { background: #000000; position: relative; }
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1; }
         
-        /* RUNDAD DEEP DARK LIQUID GLASS MENY */
+        /* EXTRA RUNDAD DEEP DARK LIQUID GLASS MENY */
         .menu-container {
             position: absolute;
             top: 28%; left: 50%; transform: translateX(-50%);
@@ -43,10 +41,10 @@
             backdrop-filter: blur(60px) saturate(180%);
             -webkit-backdrop-filter: blur(60px) saturate(180%);
             
-            border-radius: 40px; /* Rundare form */
-            padding: 12px;
+            border-radius: 50px; /* Ännu rundare! */
+            padding: 16px;       /* Mer luft för den rundare formen */
             z-index: 10;
-            display: flex; flex-direction: column; gap: 8px;
+            display: flex; flex-direction: column; gap: 10px;
             
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
@@ -58,7 +56,7 @@
         .system-button {
             width: 100%; height: 54px;
             background-color: rgba(255, 255, 255, 0.08);
-            border-radius: 28px; /* Matchar rundare form */
+            border-radius: 32px; /* Ännu rundare knappar */
             border: none;
             color: #ffffff; font-size: 17px; font-weight: 500;
             display: flex; align-items: center; justify-content: center;
