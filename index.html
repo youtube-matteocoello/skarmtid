@@ -53,6 +53,7 @@
             let length = input.value.length;
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             if(length === 4) {
+                // Vi rensar inte input.value här, så koden ligger kvar i minnet
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("time-page").classList.add("active");
             }
