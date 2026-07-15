@@ -5,58 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Skärmtid</title>
     <style>
-        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        .page { width: 100%; height: 100%; display: none; position: absolute; top: 0; left: 0; }
-        .page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* 1. Inloggning */
-        .pincode-section { text-align: center; width: 100%; }
-        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; }
-        .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: 0.2s; }
-        .dot.active { background-color: white; transform: scale(1.15); }
-        .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; }
-
-        /* 2. Tidväljare */
-        #time-page { background: #000; position: relative; }
-        .bg-image { width: 100%; height: 100%; object-fit: contain; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; }
         
-        /* KNAPP-CONTAINER - Justera 'top' om de behöver flyttas */
-        .btn-container {
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
+        .page.active { 
+            display: flex; 
+            animation: fadeIn 0.4s ease-out; 
+        }
+
+        /* 1. Inloggningsskärm */
+        .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
+        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
+        .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
+        
+        .dot { 
+            width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; 
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .dot.active { 
+            background-color: white; 
+            transform: scale(1.15); 
+        }
+        
+        .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
+
+        /* 2. Tidväljarsida */
+        #time-page { background: #000; position: relative; }
+        .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        /* 💎 GLASMENYN 💎 */
+        .glass-menu {
             position: absolute;
-            top: 29%; 
-            left: 10%;
-            width: 80%;
+            bottom: 8%; /* Om dessa knappar hamnar fel nu, ändra denna siffra! T.ex. 12% eller 4% */
+            left: 5%;
+            width: 90%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            z-index: 10;
+            gap: 10px; /* Lite mellanrum mellan knapparna */
+            z-index: 999; /* Tvingar knapparna att ligga högst upp */
         }
-
-        .btn-overlay {
-            height: 60px;
+        
+        .glass-btn {
             width: 100%;
-            background: transparent;
+            height: 60px;
+            border-radius: 14px;
+            
+            /* SVAGT SYNLIGT GLAS - så att du ser var du ska trycka! */
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(4px); 
+            -webkit-backdrop-filter: blur(4px);
+            
             cursor: pointer;
-            transition: transform 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
+            
+            /* Mjuk övergång för när den växer/krymper */
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s;
         }
-
-        /* Växer vid tryck */
-        .btn-overlay:active {
-            transform: scale(1.03);
+        
+        /* 🔥 NÄR MAN SÄTTER FINGRET PÅ KNAPPEN (Den blir större) 🔥 */
+        .glass-btn:active {
+            transform: scale(1.05); /* Den växer 5% */
+            background: rgba(255, 255, 255, 0.25); /* Glaset lyser upp lite */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* Ger en snygg skugga när den "lyfts" upp */
         }
 
         /* 3. YouTube-sida */
         #fake-youtube { background: #000; }
-        #fake-youtube img { width: 100%; height: 100%; object-fit: cover; }
-        #revealed-code { 
-            color: #ff3b30; position: absolute; bottom: 50px; font-size: 20px; font-weight: bold;
-            opacity: 0; transition: opacity 1s; pointer-events: none;
-        }
-        #revealed-code.show { opacity: 1; }
+        #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        #hidden-input { position: absolute; opacity: 0; top: -100px; }
+        /* Röd text */
+        #revealed-code { 
+            color: #ff3b30; 
+            text-align: center; 
+            position: absolute; 
+            bottom: 50px; 
+            left: 0; 
+            right: 0; 
+            font-size: 20px; 
+            z-index: 999; 
+            margin: 0; 
+            font-weight: bold; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,1); 
+            pointer-events: none; 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out; 
+        }
+        #revealed-code.show {
+            opacity: 1; 
+        }
+        
+        /* Gömt inmatningsfält */
+        #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; left: -100px; width: 1px; height: 1px; }
     </style>
 </head>
 <body>
@@ -72,19 +117,21 @@
     </div>
 
     <div id="time-page" class="page">
-        <img src="3.jpg" class="bg-image">
-        <div class="btn-container">
-            <div class="btn-overlay" onclick="goToYouTubePage()" ontouchstart=""></div>
-            <div class="btn-overlay" onclick="goToYouTubePage()" ontouchstart=""></div>
-            <div class="btn-overlay" onclick="goToYouTubePage()" ontouchstart=""></div>
-            <div class="btn-overlay" onclick="goToYouTubePage()" ontouchstart=""></div>
+        <img src="3.jpg" class="time-selection-image" alt="Välj tid">
+        
+        <div class="glass-menu">
+            <div class="glass-btn" onclick="goToYouTubePage()" ontouchstart=""></div>
+            <div class="glass-btn" onclick="goToYouTubePage()" ontouchstart=""></div>
+            <div class="glass-btn" onclick="goToYouTubePage()" ontouchstart=""></div>
+            <div class="glass-btn" onclick="goToYouTubePage()" ontouchstart=""></div>
         </div>
     </div>
 
     <div id="fake-youtube" class="page">
         <img src="4.jpeg">
-        <h2 id="revealed-code"></h2>
     </div>
+
+    <h2 id="revealed-code"></h2>
 
     <input type="tel" id="hidden-input" maxlength="4">
 
@@ -92,28 +139,41 @@
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
+        
+        document.body.addEventListener('click', () => {
+            if (document.getElementById("login-page").classList.contains("active")) {
+                input.focus();
+            }
+        });
 
         input.focus();
-        document.body.addEventListener('click', () => input.focus());
 
         input.addEventListener("input", () => {
-            let len = input.value.length;
-            dots.forEach((dot, index) => dot.classList.toggle("active", index < len));
-            if(len === 4) {
+            let length = input.value.length;
+            dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
+            
+            if(length === 4) {
+                input.disabled = true; 
+                input.blur();
+                
                 setTimeout(() => {
                     document.getElementById("login-page").classList.remove("active");
                     document.getElementById("time-page").classList.add("active");
-                }, 200);
+                }, 150); 
             }
         });
 
         function goToYouTubePage() {
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.add("active");
+            // Liten fördröjning så du hinner se knappen växa innan sidan byts!
             setTimeout(() => {
-                revealedCode.innerText = "Koden var: " + input.value;
-                revealedCode.classList.add("show");
-            }, 10000);
+                document.getElementById("time-page").classList.remove("active");
+                document.getElementById("fake-youtube").classList.add("active");
+                
+                setTimeout(() => {
+                    revealedCode.innerText = "Koden du skrev in var: " + input.value;
+                    revealedCode.classList.add("show");
+                }, 10000);
+            }, 150);
         }
     </script>
 </body>
