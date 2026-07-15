@@ -36,7 +36,7 @@
             display: flex; flex-direction: column; gap: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         .system-button {
@@ -81,12 +81,19 @@
         <img src="4.jpeg" alt="YouTube">
     </div>
 
-    <input type="tel" id="hidden-input" maxlength="4">
+    <input type="tel" id="hidden-input" maxlength="4" inputmode="numeric">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
-        input.focus();
+
+        function forceFocus() {
+            if(!input.disabled) input.focus();
+        }
+
+        document.addEventListener('click', forceFocus);
+        document.addEventListener('touchstart', forceFocus);
+        setTimeout(forceFocus, 100);
 
         input.addEventListener("input", () => {
             let length = input.value.length;
@@ -101,19 +108,17 @@
         });
 
         function loadYoutube() {
-            // Skapar en "laddningskänsla"
             const menu = document.getElementById('ios-menu');
             menu.style.transform = "translateX(-50%) scale(0.95)";
             menu.style.opacity = "0";
-            
             setTimeout(() => {
                 document.getElementById("time-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
-            }, 600);
+            }, 500);
         }
 
         function resetToLogin() {
-            location.reload(); // Enkelt sätt att nollställa allt helt
+            location.reload();
         }
     </script>
 </body>
