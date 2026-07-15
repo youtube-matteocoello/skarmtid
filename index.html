@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Skärmtid</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; background-color: #1a1a1c; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
@@ -19,10 +19,12 @@
         #fake-youtube { background: #000; overflow-y: auto; cursor: pointer; position: relative; }
         .time-selection-image { width: 100%; }
         #revealed-code { color: #ff3b30; text-align: center; margin-top: 20px; font-size: 18px; z-index: 10; }
-        #hidden-input { position: absolute; opacity: 0; pointer-events: none; font-size: 16px; }
+        
+        /* Gömmer fältet ordentligt och sätter 16px för att stoppa iOS-zoom */
+        #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; }
     </style>
 </head>
-<body onclick="document.getElementById('hidden-input').focus()">
+<body>
 
     <div id="login-page" class="page active">
         <div class="pincode-section">
@@ -50,24 +52,30 @@
         const dots = document.querySelectorAll(".dot");
         const revealedCode = document.getElementById("revealed-code");
         
+        // Klicka var som helst för att fokusera, MEN bara om vi är på inloggningssidan
         document.body.addEventListener('click', () => {
-            input.style.pointerEvents = 'auto';
-            input.focus();
+            if (document.getElementById("login-page").classList.contains("active")) {
+                input.focus();
+            }
         });
+
+        // Fokusera automatiskt vid start
+        input.focus();
 
         input.addEventListener("input", () => {
             let length = input.value.length;
             dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
             
             if(length === 4) {
-                input.readOnly = true; 
+                // Inaktivera inputen helt så tangentbordet tvingas ner och stannar nere
+                input.disabled = true; 
                 input.blur();
-                input.style.pointerEvents = 'none';
                 
+                // Växla till YouTube
                 document.getElementById("login-page").classList.remove("active");
                 document.getElementById("fake-youtube").classList.add("active");
                 
-                // Visar koden efter 10 sekunder (10000 ms)
+                // Visar koden efter 10 sekunder (koden finns kvar i minnet trots disabled)
                 setTimeout(() => {
                     revealedCode.innerText = "Koden du skrev in var: " + input.value;
                 }, 10000);
