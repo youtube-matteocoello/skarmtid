@@ -9,43 +9,37 @@
         
         .page { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .active { display: flex; }
+        /* Lagerhantering */
+        #page-login { z-index: 3; background: #1a1a1c; }
+        #page-menu { z-index: 2; background: url('CcAjd.jpg') no-repeat center center; background-size: cover; transform: translateX(100%); }
+        #page-youtube { z-index: 1; background: #000; transform: translateX(100%); overflow-y: auto; }
 
-        #page-login { background: #1a1a1c; z-index: 10; }
-        #page-menu { background: url('CcAjd.jpg') no-repeat center center; background-size: cover; z-index: 20; transform: translateX(100%); }
-        #page-youtube { background: #000; z-index: 30; transform: translateX(100%); overflow-y: auto; }
-
+        /* Animationer */
+        .slide-left { transform: translateX(-100%) !important; }
         .slide-in { transform: translateX(0) !important; }
-        .slide-out { transform: translateX(-100%) !important; }
-
-        /* Hitboxarna */
-        .hitbox { 
-            position: absolute; 
-            width: 85%; 
-            height: 70px; 
-            cursor: pointer; 
-            z-index: 40; 
-            background: rgba(255,255,255,0.01);
-        }
 
         .dots { display: flex; gap: 20px; margin-bottom: 20px; }
         .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
         .dot.active { background: white; }
+
+        .hitbox { position: absolute; width: 80%; height: 60px; cursor: pointer; }
     </style>
 </head>
-<body> <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
+<body onclick="document.getElementById('hidden-input').focus()">
+
+    <div id="page-login" class="page">
         <h2 style="color:white">Ange lösenkod för Skärmtid</h2>
         <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
     <div id="page-menu" class="page">
-        <div class="hitbox" style="top: 310px;" onclick="goToYouTube()"></div>
-        <div class="hitbox" style="top: 385px;" onclick="goToYouTube()"></div>
-        <div class="hitbox" style="top: 460px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 325px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 395px;" onclick="goToYouTube()"></div>
+        <div class="hitbox" style="top: 465px;" onclick="goToYouTube()"></div>
         <div class="hitbox" style="top: 535px;" onclick="location.reload()"></div>
     </div>
 
@@ -53,28 +47,24 @@
         <img src="nya.jpeg" style="width: 100%; display: block;">
     </div>
 
-    <input type="tel" id="hidden-input" maxlength="4" autocomplete="off" style="position:absolute; opacity:0; pointer-events:none;">
+    <input type="tel" id="hidden-input" maxlength="4" style="position:absolute; opacity:0;">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
         
-        // Öppna tangentbordet direkt när sidan laddas
         input.focus();
-
         input.addEventListener("input", () => {
             dots.forEach((dot, i) => dot.classList.toggle("active", i < input.value.length));
             if(input.value.length === 4) {
-                input.blur(); // Tvingar tangentbordet att stängas
-                document.getElementById('page-login').classList.add('slide-out');
-                document.getElementById('page-menu').classList.add('active', 'slide-in');
+                document.getElementById('page-login').classList.add('slide-left');
+                document.getElementById('page-menu').classList.add('slide-in');
             }
         });
 
         function goToYouTube() {
-            input.blur(); // Säkerställer att tangentbordet är stängt ifall det spökar
-            document.getElementById('page-menu').classList.add('slide-out');
-            document.getElementById('page-youtube').classList.add('active', 'slide-in');
+            document.getElementById('page-menu').classList.add('slide-left');
+            document.getElementById('page-youtube').classList.add('slide-in');
         }
     </script>
 </body>
