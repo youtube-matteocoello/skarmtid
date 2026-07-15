@@ -2,149 +2,87 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Skärmtid</title>
     <style>
-        html, body { 
-            margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; 
-            overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; 
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes springUp { 
-            0% { transform: translate(-50%, 15%) scale(0.95); opacity: 0; } 
-            100% { transform: translate(-50%, 0) scale(1); opacity: 1; } 
-        }
+        body { margin: 0; background: #1a1a1c; font-family: -apple-system, sans-serif; overflow: hidden; }
+        .page { display: none; position: absolute; width: 100%; height: 100%; align-items: center; justify-content: center; }
+        .page.active { display: flex; }
 
-        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
-        .page.active { display: flex; animation: fadeIn 0.4s ease-out; }
+        /* Inloggning */
+        .login-box { text-align: center; color: white; }
+        .dots { display: flex; gap: 20px; margin-top: 20px; }
+        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
+        .dot.active { background: white; }
 
-        .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
-        .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
-        .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: all 0.2s ease; }
-        .dot.active { background-color: white; transform: scale(1.15); }
-        .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
-
-        /* Dark Mode iOS 26 Liquid Glass */
+        /* Menyn - iOS 26 Dark Mode */
         .menu-container {
-            position: absolute;
-            top: 28%; left: 50%; width: 88%; max-width: 390px;
-            background: rgba(28, 28, 30, 0.85); /* Dark mode bas */
-            backdrop-filter: blur(60px) saturate(180%);
-            -webkit-backdrop-filter: blur(60px) saturate(180%);
+            width: 85%;
+            background: rgba(28, 28, 30, 0.85);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
             border-radius: 24px;
-            padding: 12px;
-            z-index: 10;
-            display: flex; flex-direction: column; gap: 8px;
-            border: 0.5px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            animation: springUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 10px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            display: flex; flex-direction: column; gap: 5px;
         }
-
-        .system-button {
+        .btn {
             width: 100%; height: 60px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 18px; border: none;
-            color: #ffffff; font-size: 18px; font-weight: 500;
-            display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s ease, transform 0.1s ease;
+            border: none; border-radius: 18px;
+            color: white; font-size: 18px;
+            transition: background 0.2s;
         }
-        .system-button.drag-active {
-            background-color: rgba(255, 255, 255, 0.12);
-            transform: scale(0.98);
-        }
+        .btn.active { background: rgba(255, 255, 255, 0.15); }
 
-        #fake-youtube { background: #1a1a1c; }
-        #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        #revealed-code { color: #ff3b30; text-align: center; position: absolute; bottom: 50px; left: 0; right: 0; font-size: 20px; z-index: 999; pointer-events: none; opacity: 0; transition: opacity 1s; }
-        #revealed-code.show { opacity: 1; }
-        #hidden-input { position: absolute; opacity: 0; pointer-events: none; }
+        #hidden-input { position: absolute; opacity: 0; }
     </style>
 </head>
-<body ontouchstart=""> 
+<body>
 
     <div id="login-page" class="page active">
-        <div class="pincode-section">
-            <div class="section-title">Ange lösenkod för Skärmtid</div>
-            <div class="dots-container">
-                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            </div>
-            <div class="error-pill">1 misslyckat lösenkodsförsök</div>
+        <div class="login-box">
+            <div>Ange lösenkod</div>
+            <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         </div>
     </div>
 
     <div id="time-page" class="page">
-        <img src="ios2.png" class="time-selection-image" alt="Välj tid">
-        <div class="menu-container" id="ios-menu">
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
-            <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
-            <button class="system-button" onclick="resetToLogin()">Avbryt</button>
+        <div class="menu-container" id="menu">
+            <button class="btn">15 minuter</button>
+            <button class="btn">En timme</button>
+            <button class="btn">Avbryt</button>
         </div>
     </div>
 
-    <div id="fake-youtube" class="page">
-        <img src="4.jpeg" alt="YouTube">
-    </div>
-
-    <h2 id="revealed-code"></h2>
     <input type="tel" id="hidden-input" maxlength="4">
 
     <script>
         const input = document.getElementById("hidden-input");
         const dots = document.querySelectorAll(".dot");
-        const revealedCode = document.getElementById("revealed-code");
-        const iosMenu = document.getElementById('ios-menu');
-        const menuButtons = document.querySelectorAll('.system-button');
+        const menu = document.getElementById('menu');
+        const btns = document.querySelectorAll('.btn');
 
-        document.body.addEventListener('click', () => { if(document.getElementById("login-page").classList.contains("active")) input.focus(); });
-        input.focus();
+        // Fokus-logik
+        document.body.onclick = () => input.focus();
+        input.oninput = () => {
+            dots.forEach((d, i) => d.classList.toggle("active", i < input.value.length));
+            if(input.value.length === 4) document.getElementById('login-page').className = 'page';
+            if(input.value.length === 4) document.getElementById('time-page').className = 'page active';
+        };
 
-        input.addEventListener("input", () => {
-            let length = input.value.length;
-            dots.forEach((dot, index) => dot.classList.toggle("active", index < length));
-            if(length === 4) {
-                input.disabled = true;
-                setTimeout(() => {
-                    document.getElementById("login-page").classList.remove("active");
-                    document.getElementById("time-page").classList.add("active");
-                }, 300);
-            }
-        });
-
-        function getButtonAtTouch(touch) {
-            let target = document.elementFromPoint(touch.clientX, touch.clientY);
-            return target ? target.closest('.system-button') : null;
-        }
-
-        iosMenu.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const activeBtn = getButtonAtTouch(e.touches[0]);
-            menuButtons.forEach(btn => btn.classList.toggle('drag-active', btn === activeBtn));
-        }, { passive: false });
-
-        iosMenu.addEventListener('touchend', (e) => {
-            menuButtons.forEach(btn => btn.classList.remove('drag-active'));
-            const activeBtn = getButtonAtTouch(e.changedTouches[0]);
-            if (activeBtn) activeBtn.click();
-        });
-
-        function goToYouTubePage() {
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.add("active");
-            setTimeout(() => { revealedCode.innerText = "Koden var: " + input.value; revealedCode.classList.add("show"); }, 4000);
-        }
-
-        function resetToLogin() {
-            input.value = ""; input.disabled = false;
-            revealedCode.innerText = ""; revealedCode.classList.remove("show");
-            dots.forEach(dot => dot.classList.remove("active"));
-            document.getElementById("time-page").classList.remove("active");
-            document.getElementById("fake-youtube").classList.remove("active");
-            document.getElementById("login-page").classList.add("active");
-            setTimeout(() => input.focus(), 400);
-        }
+        // Enkel och stabil meny-logik
+        menu.ontouchmove = (e) => {
+            const touch = e.touches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            btns.forEach(b => b.classList.toggle('active', b === target));
+        };
+        menu.ontouchend = (e) => {
+            btns.forEach(b => b.classList.remove('active'));
+            const target = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            if(target.innerText === "Avbryt") location.reload();
+            else alert("Tid vald!");
+        };
     </script>
 </body>
 </html>
