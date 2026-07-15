@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Skärmtid</title>
     <style>
+        /* DEFINIERAR REUSABLE IOS SPRING-FYSIK */
+        :root {
+            --ios-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
+            --ios-spring-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.2);
+        }
+
         html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; 
         }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        /* Denna körs nu bara på wrappern */
+        /* Hyper-smidig iOS-fjäderanimation för sidans inflygning */
         @keyframes springUp { 
-            0% { transform: translateY(35px); opacity: 0; } 
-            100% { transform: translateY(0); opacity: 1; } 
+            0% { transform: translateY(45px) scale(0.97); opacity: 0; } 
+            100% { transform: translateY(0) scale(1); opacity: 1; } 
         }
 
         .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
@@ -25,7 +30,9 @@
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: background-color 0.2s ease, transform 0.2s ease; }
+        
+        /* Knappar och dots har nu Apples 'spring' transition */
+        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: all 0.3s var(--ios-spring); }
         .dot.active { background-color: white; transform: scale(1.15); }
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
@@ -35,52 +42,53 @@
         
         .time-selection-image { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1; }
         
-        /* NY WRAPPER: Tar hand om start-animationen så att menyn kan röra sig fritt efteråt */
-        .menu-wrapper {
+        /* HYPER-REALISTISK 3D LIQUID GLASS-MENY */
+        .menu-container {
             position: absolute;
             top: 24.2%; 
             width: 82%;
-            z-index: 10;
-            animation: springUp 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-        
-        /* 3D LIQUID GLASS-MENYN */
-        .menu-container {
-            width: 100%;
-            /* Ljus gradient uppe till vänster simulerar ljusreflektion i fysiskt glas */
-            background: radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%), 
-                        linear-gradient(135deg, rgba(40, 40, 45, 0.4) 0%, rgba(20, 20, 25, 0.3) 100%);
+            
+            /* Transparent bas kombinerat med inre gradients för att simulera djup och ljusbrytning */
+            background: linear-gradient(135deg, rgba(40, 40, 45, 0.45) 0%, rgba(20, 20, 25, 0.35) 100%), 
+                        radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%); /* Ljus glare uppe till vänster */
+                        
             border-radius: 38px;
             padding: 45px 16px; 
             box-sizing: border-box;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             gap: 18px;
             
-            /* Högre opacitet på kanten för den där skarpa slipade glaskanten */
-            border: 0.5px solid rgba(255, 255, 255, 0.22);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.5),
-                inset 0 1px 1px rgba(255, 255, 255, 0.3),
-                inset 0 -1px 1px rgba(0, 0, 0, 0.2);
-                
-            backdrop-filter: blur(40px) saturate(220%) brightness(1.15) contrast(95%);
-            -webkit-backdrop-filter: blur(40px) saturate(220%) brightness(1.15) contrast(95%);
+            /* Tunnare och skarpare "slipad" vit glaskant */
+            border: 0.5px solid rgba(255, 255, 255, 0.2);
             
-            /* Extremt följsam transition frigjord från Safari-buggen! */
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, background-color 0.4s ease;
+            /* Trippel-skugga: Djup, Inre skarp vit kant, och Inre mörk skugga */
+            box-shadow: 
+                0 30px 70px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.35),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+                
+            /* Saturate(250%) & brightness(1.15) skapar den lysande vätskekänslan */
+            backdrop-filter: blur(45px) saturate(250%) brightness(1.15) contrast(95%);
+            -webkit-backdrop-filter: blur(45px) saturate(250%) brightness(1.15) contrast(95%);
+            
+            /* Infart med Apple-studs */
+            animation: springUp 0.65s var(--ios-spring-elastic) forwards;
+            
+            /* Mjuk transition för att HILA rutan ska kunna växa steglöst när du trycker */
+            transition: transform 0.4s var(--ios-spring-elastic), box-shadow 0.4s ease, background-color 0.4s ease;
             transform: scale(1);
         }
         
-        /* När fingret rör menyn lyfter hela glaset mjukt */
+        /* När du sätter fingret på menyn (eller dess knappar) så lyfter hela glasytan */
         .menu-container.menu-drag-active {
-            transform: scale(1.03); 
-            background-color: rgba(45, 45, 50, 0.35);
+            transform: scale(1.025) !important; /* Mjukt och steglöst lyft */
             box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.65), 
-                inset 0 1.5px 1.5px rgba(255, 255, 255, 0.45),
+                0 45px 90px rgba(0, 0, 0, 0.75), /* Kraftigare skugga när den lyfts */
+                inset 0 1.5px 1.5px rgba(255, 255, 255, 0.5),
                 inset 0 -1.5px 1.5px rgba(0, 0, 0, 0.25);
-            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease, background-color 0.15s ease;
+            transition: transform 0.1s linear, box-shadow 0.1s ease, background-color 0.1s ease;
         }
         
         .system-button {
@@ -89,7 +97,7 @@
             border-radius: 30px;
             border: none;
             outline: none;
-            background-color: rgba(255, 255, 255, 0.07); 
+            background-color: rgba(255, 255, 255, 0.08); 
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -103,17 +111,18 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
             
-            /* "Fjädrar" tillbaka mjukt när man drar bort fingret */
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), background-color 0.3s ease, box-shadow 0.3s ease;
+            /* 'Cubic-bezier' med studs-effekt när fingret tas bort */
+            transition: transform 0.4s var(--ios-spring-elastic), background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
-        /* Knappen växer snabbt och exakt när fingret är rakt över den */
+        /* Knappen VÄXER STEGLÖST och exakt när fingret är över den. Transition sköts nu av JavaScript för att det ska bli "Liquid" */
         .system-button.drag-active {
-            background-color: rgba(255, 255, 255, 0.16); 
-            transform: scale(1.05); 
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.15);
+            background-color: rgba(255, 255, 255, 0.22); 
+            transform: scale(1.05); /* Skalar upp märkbart */
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 5px 20px rgba(0, 0, 0, 0.2);
             
-            transition: transform 0.12s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.1s ease, box-shadow 0.1s ease;
+            /* Snabb transition in, när man trycker/drar över den */
+            transition: transform 0.1s linear, background-color 0.1s ease, box-shadow 0.1s ease;
         }
 
         /* 3. YouTube-sida */
@@ -143,13 +152,11 @@
     <div id="time-page" class="page">
         <img src="ios2.png" class="time-selection-image" alt="Välj tid">
         
-        <div class="menu-wrapper">
-            <div class="menu-container" id="ios-menu">
-                <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
-                <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
-                <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
-                <button class="system-button" onclick="resetToLogin()">Avbryt</button>
-            </div>
+        <div class="menu-container" id="ios-menu">
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn i 15 minuter</button>
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn i en timme</button>
+            <button class="system-button" onclick="goToYouTubePage()">Godkänn hela dagen</button>
+            <button class="system-button" onclick="resetToLogin()">Avbryt</button>
         </div>
     </div>
 
@@ -210,7 +217,7 @@
             setTimeout(() => { input.focus(); }, 300);
         }
 
-        /* --- DETALJERAD TOUCH-SPÅRNING --- */
+        /* --- AVANCERAD TOUCH-SPÅRNING FÖR "LIQUID GLASS" --- */
         const iosMenu = document.getElementById('ios-menu');
         const menuButtons = document.querySelectorAll('.system-button');
 
@@ -225,7 +232,7 @@
 
         // När du sätter fingret på menyn (eller dess knappar)
         iosMenu.addEventListener('touchstart', (e) => {
-            // Aktivera lyft-effekt på hela rutan omedelbart
+            // Hela glaset "lyfter" mjukt och steglöst
             iosMenu.classList.add('menu-drag-active'); 
             
             const touch = e.touches[0];
@@ -240,7 +247,7 @@
             });
         }, { passive: true });
 
-        // När du drar fingret runt i menyn
+        // Spårar fingret när du drar det (aktiverar rätt knapp steglöst)
         iosMenu.addEventListener('touchmove', (e) => {
             if (e.cancelable) {
                 e.preventDefault(); // Förhindrar Safari-skärmscroll
@@ -263,7 +270,7 @@
 
         // När du släpper fingret
         iosMenu.addEventListener('touchend', (e) => {
-            // Sänk ner hela menyn mjukt igen
+            // Sänk ner hela menyn mjukt igen (med studseffekten från CSS-transition)
             iosMenu.classList.remove('menu-drag-active'); 
             
             const touch = e.changedTouches[0];
