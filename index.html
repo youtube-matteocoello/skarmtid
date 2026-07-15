@@ -15,41 +15,51 @@
             display: none; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* Inloggningssida */
+        /* Inloggningssida - Centrerad layout */
         #page-login { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             background: #1a1a1c; z-index: 10; display: flex; 
         }
 
-        /* X-knapp (Exakt Apple-stil) */
+        /* X-knapp - Apple-stil */
         .x-button { 
-            position: absolute; top: 45px; right: 25px; 
-            color: rgba(255, 255, 255, 0.5); font-size: 28px; cursor: pointer;
-            z-index: 50; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            position: absolute; top: 40px; right: 25px; 
+            width: 35px; height: 35px;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255, 255, 255, 0.5); font-size: 26px; cursor: pointer;
+            z-index: 50;
+        }
+
+        /* Text och Prickar container */
+        .login-content {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; /* Jämnt avstånd mellan alla element */
         }
 
         h2 { 
-            color: #fff; font-size: 20px; font-weight: 500; margin-bottom: 25px; 
-            letter-spacing: -0.2px;
+            color: #fff; font-size: 20px; font-weight: 500; 
+            letter-spacing: -0.3px;
         }
 
         /* Prickar */
-        .dots { display: flex; gap: 16px; margin-bottom: 25px; }
+        .dots { display: flex; gap: 16px; }
         .dot { 
             width: 15px; height: 15px; 
             border: 1.5px solid rgba(255, 255, 255, 0.4); 
             border-radius: 50%;
+            transition: all 0.2s ease;
         }
         .dot.active { background: #fff; border-color: #fff; }
 
         /* Felmeddelande */
         .error-message {
-            color: #ff3b30;
+            color: #ff3b30; /* Apple röd */
             font-size: 14px;
             font-weight: 400;
+            margin-top: 5px;
         }
 
-        /* Meny */
+        /* Meny och YouTube */
         #page-menu { 
             background: url('bakgrund.jpg') no-repeat center center; 
             background-size: cover; 
@@ -57,7 +67,6 @@
         }
         #page-menu.active { display: block; transform: translateX(0); }
 
-        /* YouTube */
         #page-youtube { background: #000; z-index: 30; transform: translateX(100%); }
         #page-youtube.active { display: block; transform: translateX(0); }
         #page-youtube img { width: 100%; height: 100%; object-fit: contain; }
@@ -74,11 +83,14 @@
 
     <div id="page-login" class="page active" onclick="document.getElementById('hidden-input').focus()">
         <div class="x-button" onclick="resetLogin(event)">✕</div>
-        <h2>Ange lösenkod</h2>
-        <div class="dots">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        
+        <div class="login-content">
+            <h2>Ange lösenkod</h2>
+            <div class="dots">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div class="error-message">1 misslyckat lösenordsförsök</div>
         </div>
-        <div class="error-message">1 misslyckat lösenordsförsök</div>
     </div>
 
     <div id="page-menu" class="page">
