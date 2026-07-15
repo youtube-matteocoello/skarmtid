@@ -7,26 +7,33 @@
     <style>
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #1a1a1c; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Arial, sans-serif; }
         
-        .page { width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; }
-        .page.active { display: flex; }
+        /* MJUKA ÖVERGÅNGAR MELLAN SIDOR */
+        .page { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none; transition: opacity 0.4s ease-in-out; }
+        .page.active { opacity: 1; pointer-events: auto; }
 
         /* 1. Inloggningsskärm */
         .pincode-section { margin-top: 25vh; text-align: center; width: 100%; }
         .section-title { font-size: 20px; font-weight: 600; color: white; margin-bottom: 45px; letter-spacing: 0.5px; }
         .dots-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; }
-        .dot.active { background-color: white; }
+        
+        /* MJUK EFFEKT PÅ PRICKARNA */
+        .dot { width: 16px; height: 16px; border: 1px solid white; border-radius: 50%; transition: background-color 0.1s ease, transform 0.15s ease; }
+        .dot.active { background-color: white; transform: scale(1.15); } /* Växer lite när den fylls i */
+        
         .error-pill { background-color: #ff3b30; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; display: inline-block; }
 
-        /* 2. Tidväljarsida (Helskärm för iPhone 15) */
+        /* 2. Tidväljarsida */
         #time-page { background: #000; cursor: pointer; }
-        .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .time-selection-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s ease; }
+        
+        /* KLICK-FEEDBACK (känns som en riktig knapp när man trycker) */
+        #time-page:active .time-selection-image { opacity: 0.7; } 
 
-        /* 3. YouTube-sida (Helskärm för iPhone 15) */
+        /* 3. YouTube-sida */
         #fake-youtube { background: #000; }
         #fake-youtube img { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Röd text som visas ovanpå YouTube-sidan efter 10 sekunder */
+        /* MJUK INTONING AV RÖD TEXT */
         #revealed-code { 
             color: #ff3b30; 
             text-align: center; 
@@ -40,7 +47,10 @@
             font-weight: bold; 
             text-shadow: 2px 2px 4px rgba(0,0,0,1); 
             pointer-events: none; 
+            opacity: 0; /* Börjar osynlig */
+            transition: opacity 1.5s ease; /* Tonar in snyggt */
         }
+        #revealed-code.show { opacity: 1; } /* Klassen som läggs till för att visa texten */
         
         /* Gömt inmatningsfält som stoppar iOS-zoom */
         #hidden-input { position: absolute; opacity: 0; font-size: 16px; top: -100px; left: -100px; width: 1px; height: 1px; }
@@ -94,9 +104,11 @@
                 input.disabled = true; 
                 input.blur();
                 
-                // Gå till Tidväljaren (3.jpg)
-                document.getElementById("login-page").classList.remove("active");
-                document.getElementById("time-page").classList.add("active");
+                // En liten fördröjning (0.2s) så att den fjärde pricken hinner fyllas i snyggt
+                setTimeout(() => {
+                    document.getElementById("login-page").classList.remove("active");
+                    document.getElementById("time-page").classList.add("active");
+                }, 250); 
             }
         });
 
@@ -105,9 +117,10 @@
             document.getElementById("time-page").classList.remove("active");
             document.getElementById("fake-youtube").classList.add("active");
             
-            // Starta timern: Texten visas efter exakt 10 sekunder INNE på YouTube
+            // Starta timern på 10 sekunder
             setTimeout(() => {
                 revealedCode.innerText = "Koden du skrev in var: " + input.value;
+                revealedCode.classList.add("show"); // Tonar in texten!
             }, 10000);
         }
     </script>
